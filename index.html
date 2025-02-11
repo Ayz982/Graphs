@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактор графів</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="workspace">
+        <div class="toolbar">
+            <button title="Вершина">
+                <i class="fas fa-circle"></i>
+            </button>
+            <button title="Ребро">
+                <i class="fa-solid fa-code-merge"></i>
+            </button>
+            <button title="Ребро з напрямком">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <button title="Петля">
+                <i class="fas fa-undo"></i>
+            </button>
+            <button title="Змінити текст">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button title="Обрати">
+                <i class="fas fa-mouse-pointer"></i>
+            </button>
+            <button title="Переміщення"  onclick="toggleMoveMode(this)">
+                <i class="fas fa-hand-paper"></i>
+            </button>
+            <button title="Зберегти">
+                <i class="fas fa-save"></i>
+            </button>
+            <button title="Видалити">
+                <i class="fas fa-trash"></i>
+            </button>
+            <button title="Скасувати">
+                <i class="fas fa-undo-alt"></i>
+            </button>
+            <button title="Повторити">
+                <i class="fas fa-redo-alt"></i>
+            </button>
+            <button title="Збільшити" onclick="zoomOut(this)">
+                <i class="fas fa-search-plus"></i>
+            </button>
+            <button title="Зменшити" onclick="zoomIn(this)">
+                <i class="fas fa-search-minus"></i>
+            </button>
+            <button title="Формат xlsx">Імпорт з таблиці</button>
+        </div>
+        <div class="canvas-container">
+            <div class="grid" id="grid"></div>
+        </div>
+    </div>
+    <div class="functions-panel">
+        <div class="dropdown">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Функція 1
+            </button>
+            <div class="dropdown-content">
+                <p>Опис функції 1</p>
+                <button class="execute-btn">Виконати</button>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Функція 2
+            </button>
+            <div class="dropdown-content">
+                <p>Опис функції 2</p>
+                <button class="execute-btn">Виконати</button>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>
