@@ -5,6 +5,7 @@ function toggleDropdown(button) {
 let scale = 1;
 let isMoving = false;
 let lastX, lastY;
+let offsetX = 0, offsetY = 0;
 
 const grid = document.getElementById('grid');
 const canvasContainer = document.querySelector('.canvas-container');
@@ -25,7 +26,7 @@ function zoomOut(button) {
 
 // Функція для застосування масштабу до канвасу
 function applyScale() {
-    grid.style.transform = `scale(${scale})`;
+    grid.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
 }
 
 // Функція для увімкнення/вимкнення режиму переміщення
@@ -60,7 +61,12 @@ function moveCanvas(event) {
     if (!isMoving || !lastX || !lastY) return;
     const deltaX = event.clientX - lastX;
     const deltaY = event.clientY - lastY;
-    grid.style.transform = `scale(${scale}) translate(${deltaX}px, ${deltaY}px)`;
+
+    offsetX += deltaX;
+    offsetY += deltaY;
+
+    grid.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+
     lastX = event.clientX;
     lastY = event.clientY;
 }
@@ -79,4 +85,23 @@ function setActiveButton(button) {
 
     // Додаємо активний клас тільки до натиснутої кнопки
     button.classList.add('active');
+}
+
+function saveGraphAsImage() {
+    const canvasContainer = document.querySelector('.canvas-container');
+    if (!canvasContainer) {
+        alert('Контейнер не знайдений!');
+        return;
+    }
+
+    html2canvas(canvasContainer, {
+        onrendered: function(canvas) {
+            const image = canvas.toDataURL("image/png");
+
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = 'graph.png';
+            link.click();
+        }
+    });
 }

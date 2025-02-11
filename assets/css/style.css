@@ -52,6 +52,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100vh;
 }
 
 .grid {
@@ -143,4 +144,16 @@ button.active {
 .toolbar button.active {
     background-color: #4CAF50;
     color: white;
+}
+
+.vertex {
+    position: absolute;
+    background-color: blue;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.vertex:hover {
+    background-color: red; /* При наведенні вершина змінює колір */
 }

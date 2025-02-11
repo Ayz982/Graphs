@@ -12,9 +12,9 @@
 <body>
     <div class="workspace">
         <div class="toolbar">
-            <button title="Вершина">
+            <button title="Вершина" onclick="toggleVertexMode(this)">
                 <i class="fas fa-circle"></i>
-            </button>
+            </button>            
             <button title="Ребро">
                 <i class="fa-solid fa-code-merge"></i>
             </button>
@@ -33,9 +33,9 @@
             <button title="Переміщення"  onclick="toggleMoveMode(this)">
                 <i class="fas fa-hand-paper"></i>
             </button>
-            <button title="Зберегти">
+            <button title="Зберегти" onclick="saveGraphAsImage()">
                 <i class="fas fa-save"></i>
-            </button>
+            </button>                   
             <button title="Видалити">
                 <i class="fas fa-trash"></i>
             </button>
@@ -45,10 +45,10 @@
             <button title="Повторити">
                 <i class="fas fa-redo-alt"></i>
             </button>
-            <button title="Збільшити" onclick="zoomOut(this)">
+            <button title="Збільшити" onclick="zoomIn(this)">
                 <i class="fas fa-search-plus"></i>
             </button>
-            <button title="Зменшити" onclick="zoomIn(this)">
+            <button title="Зменшити" onclick="zoomOut(this)" >
                 <i class="fas fa-search-minus"></i>
             </button>
             <button title="Формат xlsx">Імпорт з таблиці</button>
@@ -77,6 +77,7 @@
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     <script src="assets/js/script.js"></script>
 </body>
 
