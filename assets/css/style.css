@@ -44,28 +44,23 @@ body {
     font-size: 14px;
     z-index: 10;
 }
-
 .canvas-container {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
     height: 100vh;
+    overflow: hidden;
+    position: relative;
+    background-color: #f8f9fa;
 }
 
 .grid {
-    width: 200%;
-    height: 200%;
-    background-size: 25px 25px;
-    background-image: linear-gradient(to right, #ddd 1px, transparent 1px),
-        linear-gradient(to bottom, #ddd 1px, transparent 1px);
+    width: 2000px; /* Велике полотно для масштабування */
+    height: 2000px;
+    background-size: 50px 50px; /* Розмір клітинки */
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
     transform-origin: top left;
-    position: absolute;
-    cursor: grab;
-    transition: transform 0.2s ease;
 }
+
 .functions-panel {
     flex: 1;
     background: #f8f8f8;
@@ -146,14 +141,43 @@ button.active {
     color: white;
 }
 
-.vertex {
-    position: absolute;
-    background-color: blue;
+/* .vertex {
+    width: 30px;
+    height: 30px;
+    background-color: #007bff;
     border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
     cursor: pointer;
-    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+}
+
+.vertex-label {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
 }
 
 .vertex:hover {
-    background-color: red; /* При наведенні вершина змінює колір */
+    background-color: red; 
 }
+
+.edge {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: black;
+    transform-origin: top left;
+}
+
+ */
+

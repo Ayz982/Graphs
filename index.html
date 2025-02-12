@@ -15,46 +15,43 @@
             <button title="Вершина" onclick="toggleVertexMode(this)">
                 <i class="fas fa-circle"></i>
             </button>            
-            <button title="Ребро">
+            <button title="Ребро" onclick="toggleEdgeMode(this)">
                 <i class="fa-solid fa-code-merge"></i>
             </button>
-            <button title="Ребро з напрямком">
+            <button title="Ребро з напрямком" onclick="toggleDirectedEdgeMode(this)">
                 <i class="fas fa-arrow-right"></i>
             </button>
-            <button title="Петля">
+            <button title="Петля" onclick="toggleLoopMode(this)">
                 <i class="fas fa-undo"></i>
             </button>
-            <button title="Змінити текст">
+            <button title="Змінити текст" onclick="editTextMode(this)">
                 <i class="fas fa-edit"></i>
             </button>
-            <button title="Обрати">
+            <button title="Обрати" onclick="toggleSelectMode(this)">
                 <i class="fas fa-mouse-pointer"></i>
             </button>
-            <button title="Переміщення"  onclick="toggleMoveMode(this)">
+            <button title="Переміщення" onclick="toggleMoveMode(this)">
                 <i class="fas fa-hand-paper"></i>
             </button>
-            <button title="Зберегти" onclick="saveGraphAsImage()">
+            <button title="Зберегти" class="save-button" onclick="toggleSelectionMode(this)">
                 <i class="fas fa-save"></i>
-            </button>                   
-            <button title="Видалити">
+            </button>                              
+            <button title="Очистити" onclick="deleteSelected()">
                 <i class="fas fa-trash"></i>
             </button>
-            <button title="Скасувати">
-                <i class="fas fa-undo-alt"></i>
-            </button>
-            <button title="Повторити">
-                <i class="fas fa-redo-alt"></i>
-            </button>
-            <button title="Збільшити" onclick="zoomIn(this)">
+            <button title="Збільшити" onclick="zoomIn()">
                 <i class="fas fa-search-plus"></i>
             </button>
-            <button title="Зменшити" onclick="zoomOut(this)" >
+            <button title="Зменшити" onclick="zoomOut()">
                 <i class="fas fa-search-minus"></i>
             </button>
-            <button title="Формат xlsx">Імпорт з таблиці</button>
+            <button title="Формат xlsx" onclick="importFromXLSX()">Імпорт з таблиці</button>
         </div>
         <div class="canvas-container">
-            <div class="grid" id="grid"></div>
+            <svg id="canvas" width="2000" height="2000">
+                <g id="canvas-group"></g>
+              </svg>
+            <!-- <div class="grid" id="grid"></div> -->
         </div>
     </div>
     <div class="functions-panel">
@@ -77,8 +74,15 @@
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.1/canvg.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="assets/js/d3.js" defer></script>
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jointjs@3.5.0/dist/joint.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/script.js"></script> -->
 </body>
 
 </html>
