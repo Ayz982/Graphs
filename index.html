@@ -45,7 +45,11 @@
             <button title="Зменшити" onclick="zoomOut()">
                 <i class="fas fa-search-minus"></i>
             </button>
-            <button title="Формат xlsx" onclick="importFromXLSX()">Імпорт з таблиці</button>
+            <button title="Формат xlsx" onclick="importFromXLSX(this)">Імпорт з таблиці</button>
+            <select id="graphType" onchange="updateToolbar()">
+                <option value="undirected">Неорієнтований</option>
+                <option value="directed">Орієнтований</option>
+            </select>
         </div>
         <div class="canvas-container">
             <svg id="canvas" width="2000" height="2000">

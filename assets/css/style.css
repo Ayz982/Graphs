@@ -140,6 +140,42 @@ button.active {
     background-color: #4CAF50;
     color: white;
 }
+/* Загальні стилі для випадаючого меню */
+#graphType {
+    padding: 8px;
+    font-size: 16px;
+    /* border: 1px solid #ddd; */
+    border-radius: 4px;
+    background-color: #ddd;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Зміна стилів при наведенні */
+#graphType:hover {
+    background-color: rgb(239, 237, 237);
+}
+
+/* Адаптивні стилі для різних розмірів екрану */
+@media (max-width: 768px) {
+    #graphType {
+        font-size: 14px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    #graphType {
+        font-size: 12px;
+        padding: 4px;
+    }
+}
+.vertex-label, .edge-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: black;
+}
 
 /* .vertex {
     width: 30px;
