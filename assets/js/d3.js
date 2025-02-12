@@ -14,6 +14,11 @@ const modes = {
     loop: false,
 };
 
+function toggleDropdown(button) {
+    let content = button.nextElementSibling;
+    content.style.display = content.style.display === "block" ? "none" : "block";
+}
+
 // Масштабування (Zoom In / Out)
 function zoomIn() {
     scale = Math.min(scale + 0.1, 2);
