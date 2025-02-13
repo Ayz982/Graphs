@@ -61,20 +61,73 @@
     <div class="functions-panel">
         <div class="dropdown">
             <button onclick="toggleDropdown(this)">
-                <i class="fas fa-chevron-down"></i> Функція 1
+                <i class="fas fa-chevron-down"></i> Розмір графа
             </button>
             <div class="dropdown-content">
-                <p>Опис функції 1</p>
-                <button class="execute-btn">Виконати</button>
+                <p>Кількість вершин у графі.</p>
+                <button class="execute-btn" onclick="executeFunction('size')">Виконати</button>
+                <div class="result" id="size-result"></div>
             </div>
         </div>
         <div class="dropdown">
             <button onclick="toggleDropdown(this)">
-                <i class="fas fa-chevron-down"></i> Функція 2
+                <i class="fas fa-chevron-down"></i> Потужність графа
             </button>
             <div class="dropdown-content">
-                <p>Опис функції 2</p>
-                <button class="execute-btn">Виконати</button>
+                <p>Кількість ребер у графі.</p>
+                <button class="execute-btn" onclick="executeFunction('power')">Виконати</button>
+                <div class="result" id="power-result"></div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Степінь вершини
+            </button>
+            <div class="dropdown-content">
+                <p>Кількість ребер, що інцидентні вершині.</p>
+                <input type="number" id="vertex-degree-input" placeholder="Введіть номер вершини" min="1">
+                <button class="execute-btn" onclick="executeFunction('degree')">Виконати</button>
+                <div class="result" id="degree-result"></div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Матриця суміжності
+            </button>
+            <div class="dropdown-content">
+                <p>Матриця, що відображає зв'язки між вершинами.</p>
+                <button class="execute-btn" onclick="executeFunction('adjacency-matrix')">Виконати</button>
+                <div class="result" id="adjacency-matrix-result"></div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Список суміжності
+            </button>
+            <div class="dropdown-content">
+                <p>Перелік вершин, що з'єднані ребрами.</p>
+                <button class="execute-btn" onclick="executeFunction('adjacency-list')">Виконати</button>
+                <div class="result" id="adjacency-list-result"></div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Список ребер
+            </button>
+            <div class="dropdown-content">
+                <p>Перелік усіх ребер у графі.</p>
+                <button class="execute-btn" onclick="executeFunction('edge-list')">Виконати</button>
+                <div class="result" id="edge-list-result"></div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Матриця інцидентності
+            </button>
+            <div class="dropdown-content">
+                <p>Матриця, що показує інцидентність ребер вершинам.</p>
+                <button class="execute-btn" onclick="executeFunction('incidence-matrix')">Виконати</button>
+                <div class="result" id="incidence-matrix-result"></div>
             </div>
         </div>
     </div>

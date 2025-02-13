@@ -39,7 +39,7 @@ function updateToolbar() {
 
 function blockButtons() {
     const buttons = document.querySelectorAll('button[title="Змінити текст"], button[title="Формат xlsx"], button[title="Обрати"], button[title="Переміщення"]');
-    
+
     buttons.forEach(button => {
         button.disabled = true; // Робимо кнопки неклікабельними
         button.style.backgroundColor = "#d3d3d3"; // Змінюємо фон на сірий
@@ -47,7 +47,7 @@ function blockButtons() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     updateToolbar();
     drawGrid();
     blockButtons();
@@ -211,6 +211,13 @@ function setActiveButton(button) {
 // Масив для збереження координат вершин
 const vertices = new Map();
 
+// Структура даних для зберігання графа
+const graph = {
+    vertices: new Map(), // Збереження вершин {id: {x, y, element}}
+    edges: [], // Масив ребер {source, target, directed}
+    adjacencyList: new Map(), // Суміжні списки {id: Set(ids)}
+};
+
 d3.select("#canvas").on("click", function (event) {
     const [mouseX, mouseY] = d3.pointer(event, this);
 
@@ -306,29 +313,6 @@ function createEdge(v1, v2) {
         .attr("class", "edge-label");
 }
 
-d3.select("style").append("style").text(`
-.vertex-label, .edge-label {
-    font-size: 14px;
-    font-weight: bold;
-    fill: black;
-    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7); /* Тінь для кращої видимості на фоні */
-    pointer-events: none; /* Текст не реагує на події мишки */
-    background-color: rgba(255, 255, 255, 0.7); /* Білий напівпрозорий фон для контрасту */
-    padding: 3px 8px; /* Більші відступи для фону */
-    border-radius: 5px; /* Округлі краї фону */
-    stroke: #333; /* Обводка тексту для кращої видимості */
-    stroke-width: 0.5px; /* Товщина обводки */
-    z-index: 10; /* Текст завжди на передньому плані */
-}
-
-.edge-label {
-    transform: translate(15px, 0px); /* Зміщення тексту вправо на 10px */
-}
-
-    .vertex { cursor: pointer; }
-    .vertex.selected { stroke: red; stroke-width: 2px; }
-    .edge { stroke: black; stroke-width: 3; }
-`);
 function createDirectedEdge(v1, v2) {
     // Відстань для зміщення стрілки від вершини (15 px)
     const arrowOffset = 15;
@@ -376,6 +360,30 @@ function createDirectedEdge(v1, v2) {
         .attr("class", "edge-label");
 }
 
+d3.select("style").append("style").text(`
+    .vertex-label, .edge-label {
+        font-size: 14px;
+        font-weight: bold;
+        fill: black;
+        text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7); /* Тінь для кращої видимості на фоні */
+        pointer-events: none; /* Текст не реагує на події мишки */
+        background-color: rgba(255, 255, 255, 0.7); /* Білий напівпрозорий фон для контрасту */
+        padding: 3px 8px; /* Більші відступи для фону */
+        border-radius: 5px; /* Округлі краї фону */
+        stroke: #333; /* Обводка тексту для кращої видимості */
+        stroke-width: 0.5px; /* Товщина обводки */
+        z-index: 10; /* Текст завжди на передньому плані */
+    }
+    
+    .edge-label {
+        transform: translate(15px, 0px); /* Зміщення тексту вправо на 10px */
+    }
+    
+        .vertex { cursor: pointer; }
+        .vertex.selected { stroke: red; stroke-width: 2px; }
+        .edge { stroke: black; stroke-width: 3; }
+    `);
+
 function deleteSelected() {
     canvasGroup.selectAll(".vertex, .edge, .edge-label, .vertex-label").remove();
     vertices.clear();
@@ -400,7 +408,7 @@ function startSelection(event) {
 
     const svg = document.getElementById("canvas");
     const rect = svg.getBoundingClientRect();
-    
+
     startX = event.clientX - rect.left;
     startY = event.clientY - rect.top;
 
@@ -414,7 +422,7 @@ function startSelection(event) {
     selectionBox.style.height = "0px";
     selectionBox.style.pointerEvents = "none";
     selectionBox.style.zIndex = "999";
-    
+
     document.body.appendChild(selectionBox);
     isSelecting = true;
 }
@@ -430,7 +438,7 @@ function updateSelection(event) {
 
     let width = Math.abs(currentX - startX);
     let height = Math.abs(currentY - startY);
-    
+
     selectionBox.style.width = `${width}px`;
     selectionBox.style.height = `${height}px`;
     selectionBox.style.left = `${Math.min(startX, currentX)}px`;
@@ -439,12 +447,12 @@ function updateSelection(event) {
 
 function endSelection(event) {
     if (!isSelecting || !modes.save) return;
-    
+
     isSelecting = false;
-    
+
     const svg = document.getElementById("canvas");
     const rect = svg.getBoundingClientRect();
-    
+
     let endX = event.clientX - rect.left;
     let endY = event.clientY - rect.top;
 
