@@ -1,0 +1,278 @@
+body {
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.workspace {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    background: #f9f9f9;
+    overflow: hidden;
+}
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: #ddd;
+    border-bottom: 2px solid #bbb;
+}
+
+.toolbar button {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 10px;
+}
+
+.toolbar button:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 14px;
+    z-index: 10;
+}
+.canvas-container {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    background-color: #f8f9fa;
+}
+
+.grid {
+    width: 2000px; /* Велике полотно для масштабування */
+    height: 2000px;
+    background-size: 50px 50px; /* Розмір клітинки */
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    transform-origin: top left;
+}
+.functions-panel {
+    flex: 1;
+    background: #f8f8f8;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid #ddd;
+    max-width: 100%;
+}
+
+.dropdown {
+    margin-bottom: 10px;
+    position: relative;
+    width: 100%;
+}
+
+.dropdown button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #e0e0e0;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.dropdown button:hover {
+    background: #d0d0d0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown button i {
+    margin-right: 10px;
+    transition: transform 0.3s;
+}
+
+.dropdown-content {
+    display: none;
+    padding: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown.open .dropdown-content {
+    display: block;
+}
+
+.dropdown.open button i {
+    transform: rotate(180deg);
+}
+
+.execute-btn {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.execute-btn:hover {
+    background: #45a049;
+}
+
+.result {
+    margin-top: 8px;
+    padding: 8px;
+    background: #f4f4f4;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+#vertex-degree-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 300px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  #vertex-degree-input::placeholder {
+    color: #aaa;
+  }
+  
+@media (max-width: 768px) {
+    #vertex-degree-input {
+        font-size: 14px;
+        padding: 8px;
+      }
+    .functions-panel {
+        padding: 10px;
+    }
+
+    .dropdown button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .execute-btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+button.active {
+    background-color: #4CAF50; /* Синій колір для акценту */
+    color: white;
+    border-radius: 5px;
+}
+
+.toolbar button.active {
+    background-color: #4CAF50;
+    color: white;
+}
+/* Загальні стилі для випадаючого меню */
+#graphType {
+    padding: 8px;
+    font-size: 16px;
+    /* border: 1px solid #ddd; */
+    border-radius: 4px;
+    background-color: #ddd;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Зміна стилів при наведенні */
+#graphType:hover {
+    background-color: rgb(239, 237, 237);
+}
+
+/* Адаптивні стилі для різних розмірів екрану */
+@media (max-width: 768px) {
+    #graphType {
+        font-size: 14px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    #graphType {
+        font-size: 12px;
+        padding: 4px;
+    }
+}
+.vertex-label, .edge-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: black;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+/* .vertex {
+    width: 30px;
+    height: 30px;
+    background-color: #007bff;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+}
+
+.vertex-label {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+}
+
+.vertex:hover {
+    background-color: red; 
+}
+
+.edge {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: black;
+    transform-origin: top left;
+}
+
+ */
+

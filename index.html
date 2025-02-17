@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактор графів</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="workspace">
+        <div class="toolbar">
+            <button title="Вершина" onclick="toggleVertexMode(this)">
+                <i class="fas fa-circle"></i>
+            </button>            
+            <button title="Ребро" onclick="toggleEdgeMode(this)">
+                <i class="fa-solid fa-code-merge"></i>
+            </button>
+            <button title="Ребро з напрямком" onclick="toggleDirectedEdgeMode(this)">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <button title="Петля" onclick="toggleLoopMode(this)">
+                <i class="fas fa-undo"></i>
+            </button>
+            <button title="Змінити текст" onclick="editTextMode(this)">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button title="Обрати" onclick="toggleSelectMode(this)">
+                <i class="fas fa-mouse-pointer"></i>
+            </button>
+            <button title="Переміщення" onclick="toggleMoveMode(this)">
+                <i class="fas fa-hand-paper"></i>
+            </button>
+            <button title="Зберегти" class="save-button" onclick="toggleSelectionMode(this)">
+                <i class="fas fa-save"></i>
+            </button>                              
+            <button title="Очистити" onclick="deleteSelected()">
+                <i class="fas fa-trash"></i>
+            </button>
+            <button title="Збільшити" onclick="zoomIn()">
+                <i class="fas fa-search-plus"></i>
+            </button>
+            <button title="Зменшити" onclick="zoomOut()">
+                <i class="fas fa-search-minus"></i>
+            </button>
+            <button title="Формат xlsx" onclick="importFromXLSX(this)">Імпорт з таблиці</button>
+            <select id="graphType" onchange="updateToolbar()">
+                <option value="undirected">Неорієнтований</option>
+                <option value="directed">Орієнтований</option>
+            </select>
+        </div>
+        <div class="canvas-container">
+            <svg id="canvas" width="2000" height="2000">
+                <g id="canvas-group"></g>
+              </svg>
+            <!-- <div class="grid" id="grid"></div> -->
+        </div>
+    </div>
+    <div class="functions-panel">
+        <div class="dropdown" id="dropdown-size">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Розмір графа
+            </button>
+            <div class="dropdown-content">
+                <p>Кількість вершин у графі.</p>
+                <button class="execute-btn" onclick="executeFunction('size')">Виконати</button>
+                <div class="result" id="size-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="dropdown-power">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Потужність графа
+            </button>
+            <div class="dropdown-content">
+                <p>Кількість ребер у графі.</p>
+                <button class="execute-btn" onclick="executeFunction('power')">Виконати</button>
+                <div class="result" id="power-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="dropdown-degree">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Степінь вершини
+            </button>
+            <div class="dropdown-content">
+                <p>Кількість ребер, що інцидентні вершині.</p>
+                <input type="number" id="vertex-degree-input" placeholder="Введіть номер вершини" min="1">
+                <button class="execute-btn" onclick="executeFunction('degree')">Виконати</button>
+                <div class="result" id="degree-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="dropdown-adjacency-matrix">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Матриця суміжності
+            </button>
+            <div class="dropdown-content">
+                <p>Матриця, що відображає зв'язки між вершинами.</p>
+                <button class="execute-btn" onclick="executeFunction('adjacency-matrix')">Виконати</button>
+                <div class="result" id="adjacency-matrix-result"></div>
+            </div>
+        </div>               
+        <div class="dropdown" id="dropdown-adjacency-list">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Список суміжності
+            </button>
+            <div class="dropdown-content">
+                <p>Перелік вершин, що з'єднані ребрами.</p>
+                <button class="execute-btn" onclick="executeFunction('adjacency-list')">Виконати</button>
+                <div class="result" id="adjacency-list-result"></div>
+            </div>
+        </div>        
+        <div class="dropdown" id="dropdown-edge-list">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Список ребер
+            </button>
+            <div class="dropdown-content">
+                <p>Перелік усіх ребер у графі.</p>
+                <button class="execute-btn" onclick="executeFunction('edge-list')">Виконати</button>
+                <div class="result" id="edge-list-result"></div>
+            </div>
+        </div>        
+        <div class="dropdown" id="dropdown-incidence-matrix">
+            <button onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Матриця інцидентності
+            </button>
+            <div class="dropdown-content">
+                <p>Матриця, що показує інцидентність ребер вершинам.</p>
+                <button class="execute-btn" onclick="executeFunction('incidence-matrix')">Виконати</button>
+                <div class="result" id="incidence-matrix-result"></div>
+            </div>
+        </div>        
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.1/canvg.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="assets/js/d3.js" defer></script>
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jointjs@3.5.0/dist/joint.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="assets/js/script.js"></script> -->
+</body>
+
+</html>
