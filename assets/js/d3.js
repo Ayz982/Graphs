@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 class Graph {
     constructor() {
+        this.type = "undirected";
         this.vertices = new Set();
         this.edges = new Map();
         this.adjacencyList = new Map();
@@ -44,11 +45,15 @@ class Graph {
 
     addEdge(v1, v2) {
         if (!this.vertices.has(v1) || !this.vertices.has(v2)) return;
-        const key = `${Math.min(v1, v2)}-${Math.max(v1, v2)}`;
+
+        const key = this.type === "directed" ? `${v1}->${v2}` : `${Math.min(v1, v2)}-${Math.max(v1, v2)}`;
+        
         if (!this.edges.has(key)) {
             this.edges.set(key, [v1, v2]);
             this.adjacencyList.get(v1).add(v2);
-            this.adjacencyList.get(v2).add(v1);
+            if (this.type === "undirected") {
+                this.adjacencyList.get(v2).add(v1);
+            }
         }
     }
     
@@ -175,40 +180,69 @@ function createDirectedEdge(v1, v2) {
         .attr("x", (x1 + adjustedX2) / 2).attr("y", (y1 + adjustedY2) / 2 - 10)
         .attr("text-anchor", "middle")
         .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
+    // Додаємо ребро в граф
+    graph.addEdge(v1, v2); 
 }
 
 // Функція для виконання операцій за запитом
 function executeFunction(functionName) {
     let result = null;
 
-    if (functionName === 'size') {
+    if (functionName === 'undirected-size') {
         result = getGraphSize();
-        document.getElementById("size-result").textContent = `Розмір графа (кількість вершин): ${result}`;
-    } else if (functionName === 'power') {
+        document.getElementById("undirected-size-result").textContent = `Розмір графа (кількість вершин): ${result}`;
+    } else  if (functionName === 'directed-size') {
+        result = getGraphSize();
+        document.getElementById("directed-size-result").textContent = `Розмір графа (кількість вершин): ${result}`;
+    } else if (functionName === 'undirected-power') {
         result = getGraphPower();
-        document.getElementById("power-result").textContent = `Потужність графа (кількість ребер): ${result}`;
-    } else if (functionName === 'degree') {
-        const vertexId = parseInt(document.getElementById("vertex-degree-input").value);
+        document.getElementById("undirected-power-result").textContent = `Потужність графа (кількість ребер): ${result}`;
+    } else if (functionName === 'directed-power') {
+        result = getGraphPower();
+        document.getElementById("directed-power-result").textContent = `Потужність графа (кількість ребер): ${result}`;
+    } else if (functionName === 'undirected-degree') {
+        const vertexId = parseInt(document.getElementById("undirected-vertex-degree-input").value);
         if (isNaN(vertexId) || vertexId < 1) {
-            document.getElementById("degree-result").textContent = "Будь ласка, введіть коректний номер вершини.";
+            document.getElementById("undirected-degree-result").textContent = "Будь ласка, введіть коректний номер вершини.";
         } else {
             result = getVertexDegree(vertexId);
-            document.getElementById("degree-result").textContent = `Степінь вершини ${vertexId}: ${result}`;
+            document.getElementById("undirected-degree-result").textContent = `Степінь вершини ${vertexId}: ${result}`;
         }
-    } else if (functionName === 'adjacency-matrix') {
+    } else if (functionName === 'directed-degree') {
+        const vertexId = parseInt(document.getElementById("directed-vertex-degree-input").value);
+        if (isNaN(vertexId) || vertexId < 1) {
+            document.getElementById("directed-degree-result").textContent = "Будь ласка, введіть коректний номер вершини.";
+        } else {
+            result = getVertexDegree(vertexId);
+            document.getElementById("directed-degree-result").textContent = `Степінь вершини ${vertexId}: ${result}`;
+        }
+    } else if (functionName === 'undirected-adjacency-matrix') {
         result = getAdjacencyMatrix();
-        displayAdjacencyMatrix(result);
-    } else if (functionName === 'adjacency-list') {
+        displayAdjacencyMatrix(result, graph.type);
+    } else if (functionName === 'directed-adjacency-matrix') {
+        result = getAdjacencyMatrix();
+        displayAdjacencyMatrix(result, graph.type);
+    } else if (functionName === 'undirected-adjacency-list') {
         result = getAdjacencyList();
-        displayAdjacencyList(result);
-    } else if (functionName === 'edge-list') {
+        displayAdjacencyList(result, graph.type);
+    } else if (functionName === 'directed-adjacency-list') {
+        result = getAdjacencyList();
+        displayAdjacencyList(result, graph.type);
+    } else if (functionName === 'undirected-edge-list') {
         result = getEdgeList();
-        displayEdgeList(result);
-    } else if (functionName === 'incidence-matrix') {
+        displayEdgeList(result, graph.type);
+    } else if (functionName === 'directed-edge-list') {
+        result = getEdgeList();
+        displayEdgeList(result, graph.type);
+    } else if (functionName === 'undirected-incidence-matrix') {
         result = getIncidenceMatrix();
-        displayIncidenceMatrix(result, graph.edges);
-    }    
+        displayIncidenceMatrix(result, graph.type);
+    } else if (functionName === 'directed-incidence-matrix') {
+        result = getIncidenceMatrix();
+        displayIncidenceMatrix(result, graph.type);
+    }      
 }
+
 // Функція для отримання матриці інцидентності
 function getIncidenceMatrix() {
     const verticesArray = [...graph.vertices];  // Масив всіх вершин
@@ -229,16 +263,33 @@ function getIncidenceMatrix() {
         const vertex1Index = verticesArray.indexOf(vertex1);
         const vertex2Index = verticesArray.indexOf(vertex2);
 
-        matrix[vertex1Index][j] = 1;  // 1, якщо вершина інцидентна ребру
-        matrix[vertex2Index][j] = 1;  // 1, якщо вершина інцидентна ребру
+        if (graph.type === "undirected") {
+            // Для неорієнтованого графа обидві вершини інцидентні цьому ребру
+            matrix[vertex1Index][j] = 1;
+            matrix[vertex2Index][j] = 1;
+        } else if (graph.type === "directed") {
+            // Для орієнтованого графа лише вершина 1 інцидентна з вихідним ребром
+            matrix[vertex1Index][j] = -1;
+            matrix[vertex2Index][j] = 1;  // Для орієнтованих ребер друга вершина отримує -1
+        }
     });
 
     return matrix;
 }
+
 // Функція для відображення матриці інцидентності з автоматичним визначенням назв ребер
-function displayIncidenceMatrix(matrix) {
-    const resultElement = document.getElementById("incidence-matrix-result");
-    
+function displayIncidenceMatrix(matrix, type) {
+    let resultElement;  // Оголошуємо змінну resultElement поза умовами
+
+    if (type === "directed") {
+        resultElement = document.getElementById("directed-incidence-matrix-result");
+    } else if (type === "undirected") {
+        resultElement = document.getElementById("undirected-incidence-matrix-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+  
     // Очистити вміст перед відображенням нових даних
     resultElement.innerHTML = "";
 
@@ -308,7 +359,6 @@ function displayIncidenceMatrix(matrix) {
     resultElement.appendChild(table);
 }
 
-
 // Функція для отримання списку ребер
 function getEdgeList() {
     const edgeList = [];
@@ -316,7 +366,14 @@ function getEdgeList() {
     // Ітеруємо через всі вершини графа і додаємо ребра
     graph.vertices.forEach(vertex => {
         graph.adjacencyList.get(vertex).forEach(neighbor => {
-            if (!edgeList.some(edge => (edge[0] === vertex && edge[1] === neighbor) || (edge[0] === neighbor && edge[1] === vertex))) {
+            // Для неорієнтованого графа додаємо ребра без зворотних
+            if (graph.type === "undirected") {
+                // Перевіряємо, чи не додано вже зворотне ребро
+                if (!edgeList.some(edge => (edge[0] === vertex && edge[1] === neighbor) || (edge[0] === neighbor && edge[1] === vertex))) {
+                    edgeList.push([vertex, neighbor]);
+                }
+            } else if (graph.type === "directed") {
+                // Для орієнтованого графа додаємо ребра з напрямком
                 edgeList.push([vertex, neighbor]);
             }
         });
@@ -324,14 +381,27 @@ function getEdgeList() {
 
     return edgeList;
 }
-
 // Функція для відображення списку ребер
-function displayEdgeList(edgeList) {
-    const resultElement = document.getElementById("edge-list-result");
+function displayEdgeList(edgeList, type) {
+    let resultElement;
+
+    if (type === "directed") {
+        resultElement = document.getElementById("directed-edge-list-result");
+    } else if (type === "undirected") {
+        resultElement = document.getElementById("undirected-edge-list-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+
     resultElement.innerHTML = "<ul>";
 
     edgeList.forEach(edge => {
-        resultElement.innerHTML += `<li>${edge[0]} - ${edge[1]}</li>`;
+        if (type === "directed") {
+            resultElement.innerHTML += `<li>${edge[0]} → ${edge[1]}</li>`; // Для орієнтованого графа
+        } else if (type === "undirected") {
+            resultElement.innerHTML += `<li>${edge[0]} - ${edge[1]}</li>`; // Для неорієнтованого графа
+        }
     });
 
     resultElement.innerHTML += "</ul>";
@@ -345,14 +415,35 @@ function getAdjacencyList() {
     graph.vertices.forEach(vertex => {
         const neighbors = Array.from(graph.adjacencyList.get(vertex));
         adjacencyList.set(vertex, neighbors);
+
+        // Для неорієнтованого графа додаємо зворотні зв'язки
+        if (graph.type === "undirected") {
+            neighbors.forEach(neighbor => {
+                if (!adjacencyList.get(neighbor)) {
+                    adjacencyList.set(neighbor, []);
+                }
+                if (!adjacencyList.get(neighbor).includes(vertex)) {
+                    adjacencyList.get(neighbor).push(vertex);
+                }
+            });
+        }
     });
 
     return adjacencyList;
 }
-
 // Функція для відображення списку суміжності
-function displayAdjacencyList(adjacencyList) {
-    const resultElement = document.getElementById("adjacency-list-result");
+function displayAdjacencyList(adjacencyList, type) {
+    let resultElement;
+
+    if (type === "directed") {
+        resultElement = document.getElementById("directed-adjacency-list-result");
+    } else if (type === "undirected") {
+        resultElement = document.getElementById("undirected-adjacency-list-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+
     resultElement.innerHTML = "<ul>";
 
     adjacencyList.forEach((neighbors, vertex) => {
@@ -371,15 +462,20 @@ function getAdjacencyMatrix() {
     for (let i = 0; i < verticesArray.length; i++) {
         matrix[i] = [];
         for (let j = 0; j < verticesArray.length; j++) {
-            matrix[i][j] = 0;  // 0, якщо немає ребра, 1 - якщо є
+            matrix[i][j] = 0;  // Ініціалізуємо всі елементи як 0
         }
     }
 
-    // Заповнюємо матрицю залежно від наявності ребер
+    // Заповнюємо матрицю залежно від наявності ребер, включаючи петлі
     verticesArray.forEach((vertex1, i) => {
         verticesArray.forEach((vertex2, j) => {
-            if (i !== j && graph.adjacencyList.get(vertex1).has(vertex2)) {
-                matrix[i][j] = 1;  // Для неорієнтованого графа
+            if (graph.adjacencyList.get(vertex1).has(vertex2)) {
+                if (graph.type === "undirected") {
+                    matrix[i][j] = 1;  // Для неорієнтованого графа ставимо 1 для обох напрямків
+                    matrix[j][i] = 1;  // Зв'язок двосторонній
+                } else if (graph.type === "directed") {
+                    matrix[i][j] = 1;  // Для орієнтованого графа лише один напрямок
+                }
             }
         });
     });
@@ -388,9 +484,18 @@ function getAdjacencyMatrix() {
 }
 
 // Функція для відображення матриці суміжності
-function displayAdjacencyMatrix(matrix) {
-    const resultElement = document.getElementById("adjacency-matrix-result");
-    
+function displayAdjacencyMatrix(matrix, type) {
+    let resultElement;
+
+    if (type === "directed") {
+        resultElement = document.getElementById("directed-adjacency-matrix-result");
+    } else if (type === "undirected") {
+        resultElement = document.getElementById("undirected-adjacency-matrix-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+
     // Очистити вміст перед відображенням нових даних
     resultElement.innerHTML = "";
 
@@ -446,16 +551,30 @@ function displayAdjacencyMatrix(matrix) {
     resultElement.appendChild(table);
 }
 
-
 // Функція для визначення степеня вершини
 function getVertexDegree(vertexId) {
     if (!graph.vertices.has(vertexId)) {
         return `Вершина з номером ${vertexId} не існує.`;
     }
-    // Степінь вершини — це кількість ребер, що інцидентні вершині
-    const neighbors = graph.adjacencyList.get(vertexId);
-    return neighbors ? neighbors.size : 0;
+
+    if (graph.type === "undirected") {
+        // Для неорієнтованого графа степінь — це кількість сусідніх вершин
+        return `${graph.adjacencyList.get(vertexId).size}`;
+    } else if (graph.type === "directed") {
+        // Для орієнтованого графа обчислюємо вхідний та вихідний степінь окремо
+        const outDegree = graph.adjacencyList.get(vertexId).size;
+        let inDegree = 0;
+
+        for (let neighbors of graph.adjacencyList.values()) {
+            if (neighbors.has(vertexId)) inDegree++;
+        }
+
+        const totalDegree = inDegree + outDegree;
+
+        return `${totalDegree} Вхідний = ${inDegree}, Вихідний = ${outDegree}`;
+    }
 }
+
 
 // Функція для визначення розміру графа (кількість вершин)
 function getGraphSize() {
@@ -471,30 +590,47 @@ function updateToolbar() {
     var graphType = document.getElementById("graphType").value;
     var edgeButton = document.querySelector('button[title="Ребро"]');
     var directedEdgeButton = document.querySelector('button[title="Ребро з напрямком"]');
-    const dropdowns = [
-        document.getElementById('dropdown-power'),
-        document.getElementById('dropdown-degree'),
-        document.getElementById('dropdown-adjacency-matrix'),
-        document.getElementById('dropdown-adjacency-list'),
-        document.getElementById('dropdown-edge-list'),
-        document.getElementById('dropdown-incidence-matrix'),
+    const undirectedDropdowns = [
+        document.getElementById('undirected-dropdown-size'),
+        document.getElementById('undirected-dropdown-power'),
+        document.getElementById('undirected-dropdown-degree'),
+        document.getElementById('undirected-dropdown-adjacency-matrix'),
+        document.getElementById('undirected-dropdown-adjacency-list'),
+        document.getElementById('undirected-dropdown-edge-list'),
+        document.getElementById('undirected-dropdown-incidence-matrix'),
     ];
-
+    const directedDropdowns = [
+        document.getElementById('directed-dropdown-size'),
+        document.getElementById('directed-dropdown-power'),
+        document.getElementById('directed-dropdown-degree'),
+        document.getElementById('directed-dropdown-adjacency-matrix'),
+        document.getElementById('directed-dropdown-adjacency-list'),
+        document.getElementById('directed-dropdown-edge-list'),
+        document.getElementById('directed-dropdown-incidence-matrix'),
+    ];
     if (graphType === "directed") {
+        graph.type = "directed";
         edgeButton.disabled = true;
         edgeButton.style.color = "grey";
         directedEdgeButton.disabled = false;
         directedEdgeButton.style.color = "initial";
-        dropdowns.forEach(dropdown => {
+        undirectedDropdowns.forEach(dropdown => {
             dropdown.style.display = 'none';
         });
+        directedDropdowns.forEach(dropdown => {
+            dropdown.style.display = 'block';
+        });
     } else {
+        graph.type = "undirected";
         edgeButton.disabled = false;
         edgeButton.style.color = "initial";
         directedEdgeButton.disabled = true;
         directedEdgeButton.style.color = "grey";
-        dropdowns.forEach(dropdown => {
+        undirectedDropdowns.forEach(dropdown => {
             dropdown.style.display = 'block';
+        });
+        directedDropdowns.forEach(dropdown => {
+            dropdown.style.display = 'none';
         });
     }
 }
