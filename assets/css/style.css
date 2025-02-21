@@ -153,6 +153,7 @@ body {
 #undirected-vertex-degree-input,
 #directed-vertex-degree-input {
     padding: 10px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 100%;
@@ -243,6 +244,11 @@ td {
     padding: 5px;
     text-align: center;
 }
+
+.vertex:hover {
+    background-color: red; 
+}
+
 /* .vertex {
     width: 30px;
     height: 30px;

@@ -47,7 +47,7 @@ class Graph {
         if (!this.vertices.has(v1) || !this.vertices.has(v2)) return;
 
         const key = this.type === "directed" ? `${v1}->${v2}` : `${Math.min(v1, v2)}-${Math.max(v1, v2)}`;
-        
+
         if (!this.edges.has(key)) {
             this.edges.set(key, [v1, v2]);
             this.adjacencyList.get(v1).add(v2);
@@ -56,7 +56,7 @@ class Graph {
             }
         }
     }
-    
+
 }
 
 const graph = new Graph();
@@ -83,7 +83,7 @@ canvas.on("click", function (event) {
 });
 
 function createVertex(x, y) {
-    const vertexID = vertexCount++; 
+    const vertexID = vertexCount++;
     const vertex = canvasGroup.append("circle")
         .attr("cx", x).attr("cy", y).attr("r", 15)
         .attr("fill", "black").attr("class", "vertex")
@@ -181,7 +181,7 @@ function createDirectedEdge(v1, v2) {
         .attr("text-anchor", "middle")
         .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
     // Додаємо ребро в граф
-    graph.addEdge(v1, v2); 
+    graph.addEdge(v1, v2);
 }
 
 // Функція для виконання операцій за запитом
@@ -191,7 +191,7 @@ function executeFunction(functionName) {
     if (functionName === 'undirected-size') {
         result = getGraphSize();
         document.getElementById("undirected-size-result").textContent = `Розмір графа (кількість вершин): ${result}`;
-    } else  if (functionName === 'directed-size') {
+    } else if (functionName === 'directed-size') {
         result = getGraphSize();
         document.getElementById("directed-size-result").textContent = `Розмір графа (кількість вершин): ${result}`;
     } else if (functionName === 'undirected-power') {
@@ -240,7 +240,407 @@ function executeFunction(functionName) {
     } else if (functionName === 'directed-incidence-matrix') {
         result = getIncidenceMatrix();
         displayIncidenceMatrix(result, graph.type);
-    }      
+    } else if (functionName === 'undirected-distance-matrix') {
+        result = getDistanceMatrix();
+        displayDistanceMatrix(result, graph.type);
+    } else if (functionName === 'directed-distance-matrix') {
+        result = getDistanceMatrix();
+        displayDistanceMatrix(result, graph.type);
+    } else if (functionName === 'undirected-eccentricities-vertices') {
+        result = getEccentricitiesVertices();
+        displayEccentricitiesVertices(result, graph.type);
+    } else if (functionName === 'directed-eccentricities-vertices') {
+        result = getEccentricitiesVertices();
+        displayEccentricitiesVertices(result, graph.type);
+    } else if (functionName === 'undirected-radius-graph') {
+        result = getRadiusGraph();
+        displayRadiusGraph(result, graph.type);
+    } else if (functionName === 'directed-radius-graph') {
+        result = getRadiusGraph();
+        displayRadiusGraph(result, graph.type);
+    } else if (functionName === 'undirected-diameter-graph') {
+        result = getDiameterGraph();
+        displayDiameterGraph(result, graph.type);
+    } else if (functionName === 'directed-diameter-graph') {
+        result = getDiameterGraph();
+        displayDiameterGraph(result, graph.type);
+    } else if (functionName === 'undirected-center-graph') {
+        result = getCenterGraph();
+        displayCenterGraph(result, graph.type);
+    } else if (functionName === 'directed-center-graph') {
+        result = getCenterGraph();
+        displayCenterGraph(result, graph.type);
+    } else if (functionName === 'undirected-cyclomatic-number') {
+        result = getCyclomaticNumber(graph);
+        displayCyclomaticNumber(result, graph.type);
+    } else if (functionName === 'directed-cyclomatic-number') {
+        result = getCyclomaticNumber(graph);
+        displayCyclomaticNumber(result, graph.type);
+    }
+}
+// Алгоритм DFS для пошуку компонент зв'язності
+function getConnectedComponents(graph) {
+    let visited = new Set();
+    let components = 0;
+
+    const dfs = (vertex) => {
+        visited.add(vertex);
+        for (let neighbor of graph.adjacencyList.get(vertex)) {
+            if (!visited.has(neighbor)) {
+                dfs(neighbor);
+            }
+        }
+    };
+
+    // Проходимо по всіх вершинах
+    for (let vertex of graph.vertices) {
+        if (!visited.has(vertex)) {
+            dfs(vertex);
+            components++;
+        }
+    }
+
+    return components;
+}
+
+// Функція для обчислення цикломатичного числа
+function getCyclomaticNumber(graph) {
+    const verticesCount = graph.vertices.size;
+    const edgesCount = graph.edges.size;
+    const components = getConnectedComponents(graph);
+
+    // Цикломатичне число: E - V + P
+    return edgesCount - verticesCount + components;
+}
+// Функція для відображення цикломатичного числа
+function displayCyclomaticNumber(result, graphType) {
+    let resultElement;
+
+    if (graphType === "directed") {
+        resultElement = document.getElementById("directed-cyclomatic-number-result");
+    } else if (graphType === "undirected") {
+        resultElement = document.getElementById("undirected-cyclomatic-number-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+
+    // Очищуємо попередній вміст
+    resultElement.innerHTML = "";
+
+    // Виводимо результат
+    const resultText = document.createElement("p");
+    resultText.textContent = `Цикломатичне число графа: ${result}`;
+    resultElement.appendChild(resultText);
+}
+function getCenterGraph() {
+    const eccentricities = getEccentricitiesVertices(); // Отримуємо ексцентриситети для всіх вершин
+    const radius = getRadiusGraph(); // Отримуємо радіус графа
+
+    if (radius === "Граф не з'єднаний") {
+        return "Граф не з'єднаний";
+    }
+
+    // Фільтруємо вершини, ексцентриситет яких дорівнює радіусу
+    const centerVertices = Object.entries(eccentricities)
+        .filter(([vertex, eccentricity]) => eccentricity == radius)
+        .map(([vertex]) => vertex);
+
+    if (centerVertices.length === 0) {
+        return "Центр не знайдений";
+    }
+
+    return centerVertices;
+}
+
+function displayCenterGraph(result, graphType) {
+    let resultElement;
+
+    if (graphType === "directed") {
+        resultElement = document.getElementById("directed-center-graph-result");
+    } else if (graphType === "undirected") {
+        resultElement = document.getElementById("undirected-center-graph-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+
+    // Очищуємо попередній вміст
+    resultElement.innerHTML = "";
+
+    // Виводимо результат
+    const resultText = document.createElement("p");
+    if (Array.isArray(result)) {
+        resultText.textContent = `Центр графа: ${result.join(", ")}`;
+    } else {
+        resultText.textContent = result; // Якщо центр не знайдено або граф не з'єднаний
+    }
+    resultElement.appendChild(resultText);
+}
+
+function getDiameterGraph() {
+    const eccentricities = getEccentricitiesVertices(); // Отримуємо ексцентриситети для всіх вершин
+    const eccentricityValues = Object.values(eccentricities);
+
+    // Фільтруємо значення "∞" (ізольовані вершини), оскільки вони не враховуються для діаметра
+    const finiteEccentricities = eccentricityValues.filter(ecc => ecc !== "∞");
+
+    // Якщо всі ексцентриситети "∞", це означає, що граф не з'єднаний, діаметр неможливий
+    if (finiteEccentricities.length === 0) {
+        return "Граф не з'єднаний";
+    }
+
+    // Знаходимо максимальний ексцентриситет
+    const diameter = Math.max(...finiteEccentricities);
+    return diameter;
+}
+
+function displayDiameterGraph(result, graphType) {
+    let resultElement;
+
+    if (graphType === "directed") {
+        resultElement = document.getElementById("directed-diameter-graph-result");
+    } else if (graphType === "undirected") {
+        resultElement = document.getElementById("undirected-diameter-graph-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+
+    // Очищуємо попередній вміст
+    resultElement.innerHTML = "";
+
+    // Виводимо результат
+    const resultText = document.createElement("p");
+    resultText.textContent = `Діаметр графа: ${result}`;
+    resultElement.appendChild(resultText);
+}
+
+function getRadiusGraph() {
+    const eccentricities = getEccentricitiesVertices(); // Отримуємо ексцентриситети для всіх вершин
+    const eccentricityValues = Object.values(eccentricities);
+
+    // Фільтруємо значення "∞" (ізольовані вершини), оскільки вони не враховуються для радіусу
+    const finiteEccentricities = eccentricityValues.filter(ecc => ecc !== "∞");
+
+    // Якщо всі ексцентриситети "∞", це означає, що граф не з'єднаний, радіус неможливий
+    if (finiteEccentricities.length === 0) {
+        return "Граф не з'єднаний";
+    }
+
+    // Знаходимо мінімальний ексцентриситет
+    const radius = Math.min(...finiteEccentricities);
+    return radius;
+}
+
+function displayRadiusGraph(result, graphType) {
+    let resultElement;
+
+    if (graphType === "directed") {
+        resultElement = document.getElementById("directed-radius-graph-result");
+    } else if (graphType === "undirected") {
+        resultElement = document.getElementById("undirected-radius-graph-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+
+    // Очищуємо попередній вміст
+    resultElement.innerHTML = "";
+
+    // Виводимо результат
+    const resultText = document.createElement("p");
+    resultText.textContent = `Радіус графа: ${result}`;
+    resultElement.appendChild(resultText);
+}
+
+function getEccentricitiesVertices() {
+    const distanceMatrix = getDistanceMatrix(); // Отримуємо матрицю відстаней
+    const size = distanceMatrix.length;
+    const eccentricities = {};
+
+    // Перебираємо всі вершини
+    Array.from(graph.vertices).forEach((vertex, i) => {
+        let maxDistance = -Infinity;
+
+        // Знаходимо максимальну відстань від поточної вершини до інших
+        for (let j = 0; j < size; j++) {
+            if (i !== j && distanceMatrix[i][j] !== Infinity) {
+                maxDistance = Math.max(maxDistance, distanceMatrix[i][j]);
+            }
+        }
+
+        // Якщо вершина ізольована (не має шляхів), ексцентриситет ∞
+        eccentricities[vertex] = maxDistance === -Infinity ? "∞" : maxDistance;
+    });
+
+    return eccentricities;
+}
+
+// Функція для відображення ексцентриситетів вершин
+function displayEccentricitiesVertices(eccentricities, graphType) {
+    let resultElement;
+
+    if (graphType === "directed") {
+        resultElement = document.getElementById("directed-eccentricities-vertices-result");
+    } else if (graphType === "undirected") {
+        resultElement = document.getElementById("undirected-eccentricities-vertices-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+
+    // Очищуємо попередній вміст
+    resultElement.innerHTML = "";
+
+    if (!eccentricities || Object.keys(eccentricities).length === 0) {
+        resultElement.textContent = "Дані відсутні або граф порожній.";
+        return;
+    }
+
+    // Створюємо таблицю
+    const table = document.createElement("table");
+    table.style.borderCollapse = "collapse";
+
+    // Заголовок таблиці
+    const headerRow = document.createElement("tr");
+
+    const thVertex = document.createElement("th");
+    thVertex.textContent = "Вершина";
+    thVertex.style.border = "1px solid black";
+    thVertex.style.padding = "5px";
+    headerRow.appendChild(thVertex);
+
+    const thEccentricity = document.createElement("th");
+    thEccentricity.textContent = "Ексцентриситет";
+    thEccentricity.style.border = "1px solid black";
+    thEccentricity.style.padding = "5px";
+    headerRow.appendChild(thEccentricity);
+
+    table.appendChild(headerRow);
+
+    // Додаємо рядки з даними
+    for (const [vertex, eccentricity] of Object.entries(eccentricities)) {
+        const row = document.createElement("tr");
+
+        const tdVertex = document.createElement("td");
+        tdVertex.textContent = vertex;
+        tdVertex.style.border = "1px solid black";
+        tdVertex.style.padding = "5px";
+        row.appendChild(tdVertex);
+
+        const tdEccentricity = document.createElement("td");
+        tdEccentricity.textContent = eccentricity;
+        tdEccentricity.style.border = "1px solid black";
+        tdEccentricity.style.padding = "5px";
+        row.appendChild(tdEccentricity);
+
+        table.appendChild(row);
+    }
+
+    resultElement.appendChild(table);
+}
+
+
+// Функція для отримання матриці відстаней у неваговому графі
+function getDistanceMatrix() {
+    const verticesArray = [...graph.vertices]; // Масив вершин
+    const edgesArray = getEdgeList(); // Список ребер
+    const size = verticesArray.length;
+    const matrix = Array.from({ length: size }, () => Array(size).fill(Infinity));
+
+    // Відстань від вершини до самої себе = 0
+    for (let i = 0; i < size; i++) {
+        matrix[i][i] = 0;
+    }
+
+    // Заповнюємо матрицю суміжності (відстань між сусідніми вершинами = 1)
+    edgesArray.forEach(([v1, v2]) => {
+        const i = verticesArray.indexOf(v1);
+        const j = verticesArray.indexOf(v2);
+        matrix[i][j] = 1;
+
+        if (graph.type === "undirected") {
+            matrix[j][i] = 1; // Для неорієнтованого графа відстань симетрична
+        }
+    });
+
+    // Алгоритм Флойда-Воршалла для знаходження найкоротших шляхів між усіма вершинами
+    for (let k = 0; k < size; k++) {
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if (matrix[i][k] !== Infinity && matrix[k][j] !== Infinity) {
+                    matrix[i][j] = Math.min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+                }
+            }
+        }
+    }
+
+    return matrix;
+}
+
+// Функція для відображення матриці відстаней
+function displayDistanceMatrix(matrix, type) {
+    let resultElement;  // Оголошуємо змінну resultElement поза умовами
+
+    if (type === "directed") {
+        resultElement = document.getElementById("directed-distance-matrix-result");
+    } else if (type === "undirected") {
+        resultElement = document.getElementById("undirected-distance-matrix-result");
+    } else {
+        console.error("Невідомий тип графа");
+        return;
+    }
+
+    // Очистити старий результат
+    resultElement.innerHTML = "";
+
+    if (!matrix || matrix.length === 0) {
+        resultElement.textContent = "Матриця порожня або некоректні дані.";
+        return;
+    }
+
+    const table = document.createElement("table");
+    table.style.borderCollapse = "collapse";
+
+    // Заголовок таблиці (номери вершин)
+    const headerRow = document.createElement("tr");
+    headerRow.appendChild(document.createElement("th")); // Порожня клітинка для верхнього лівого кута
+
+    for (let i = 0; i < matrix.length; i++) {
+        const th = document.createElement("th");
+        th.textContent = `В${i + 1}`;
+        th.style.border = "1px solid black";
+        th.style.padding = "5px";
+        headerRow.appendChild(th);
+    }
+
+    table.appendChild(headerRow);
+
+    // Додавання рядків
+    for (let i = 0; i < matrix.length; i++) {
+        const tr = document.createElement("tr");
+
+        // Назва вершини (номер рядка)
+        const th = document.createElement("th");
+        th.textContent = `В${i + 1}`;
+        th.style.border = "1px solid black";
+        th.style.padding = "5px";
+        tr.appendChild(th);
+
+        // Заповнення значень матриці
+        for (let j = 0; j < matrix[i].length; j++) {
+            const td = document.createElement("td");
+            td.textContent = matrix[i][j] === Infinity ? "∞" : matrix[i][j]; // Заміна Infinity на "∞"
+            td.style.border = "1px solid black";
+            td.style.padding = "5px";
+            tr.appendChild(td);
+        }
+
+        table.appendChild(tr);
+    }
+
+    resultElement.appendChild(table);
 }
 
 // Функція для отримання матриці інцидентності
@@ -289,7 +689,7 @@ function displayIncidenceMatrix(matrix, type) {
         console.error("Невідомий тип графа");
         return;
     }
-  
+
     // Очистити вміст перед відображенням нових даних
     resultElement.innerHTML = "";
 
@@ -310,8 +710,8 @@ function displayIncidenceMatrix(matrix, type) {
             }
         });
 
-        return vertices.length === 2 
-            ? `Ребро ${vertices[0]}-${vertices[1]}` 
+        return vertices.length === 2
+            ? `Ребро ${vertices[0]}-${vertices[1]}`
             : `Ребро ${vertices.join(",")}`; // Для орієнтованих або мультиграфів
     });
 
@@ -571,7 +971,7 @@ function getVertexDegree(vertexId) {
 
         const totalDegree = inDegree + outDegree;
 
-        return `${totalDegree} Вхідний = ${inDegree}, Вихідний = ${outDegree}`;
+        return `${totalDegree}; Вхідний = ${inDegree}, Вихідний = ${outDegree}`;
     }
 }
 
@@ -598,6 +998,11 @@ function updateToolbar() {
         document.getElementById('undirected-dropdown-adjacency-list'),
         document.getElementById('undirected-dropdown-edge-list'),
         document.getElementById('undirected-dropdown-incidence-matrix'),
+        document.getElementById('undirected-dropdown-eccentricities-vertices'),
+        document.getElementById('undirected-dropdown-radius-graph'),
+        document.getElementById('undirected-dropdown-diameter-graph'),
+        document.getElementById('undirected-dropdown-center-graph'),
+        document.getElementById('undirected-dropdown-cyclomatic-number'),
     ];
     const directedDropdowns = [
         document.getElementById('directed-dropdown-size'),
@@ -607,6 +1012,12 @@ function updateToolbar() {
         document.getElementById('directed-dropdown-adjacency-list'),
         document.getElementById('directed-dropdown-edge-list'),
         document.getElementById('directed-dropdown-incidence-matrix'),
+        document.getElementById('directed-dropdown-distance-matrix'),
+        document.getElementById('directed-dropdown-eccentricities-vertices'),
+        document.getElementById('directed-dropdown-radius-graph'),
+        document.getElementById('directed-dropdown-diameter-graph'),
+        document.getElementById('directed-dropdown-center-graph'),
+        document.getElementById('directed-dropdown-cyclomatic-number'),
     ];
     if (graphType === "directed") {
         graph.type = "directed";

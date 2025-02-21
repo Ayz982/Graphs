@@ -14,7 +14,7 @@
         <div class="toolbar">
             <button title="Вершина" onclick="toggleVertexMode(this)">
                 <i class="fas fa-circle"></i>
-            </button>            
+            </button>
             <button title="Ребро" onclick="toggleEdgeMode(this)">
                 <i class="fa-solid fa-code-merge"></i>
             </button>
@@ -35,7 +35,7 @@
             </button>
             <button title="Зберегти" class="save-button" onclick="toggleSelectionMode(this)">
                 <i class="fas fa-save"></i>
-            </button>                              
+            </button>
             <button title="Очистити" onclick="deleteSelected()">
                 <i class="fas fa-trash"></i>
             </button>
@@ -54,7 +54,7 @@
         <div class="canvas-container">
             <svg id="canvas" width="2000" height="2000">
                 <g id="canvas-group"></g>
-              </svg>
+            </svg>
             <!-- <div class="grid" id="grid"></div> -->
         </div>
     </div>
@@ -102,7 +102,7 @@
                 <button class="execute-btn" onclick="executeFunction('undirected-adjacency-matrix')">Виконати</button>
                 <div class="result" id="undirected-adjacency-matrix-result"></div>
             </div>
-        </div>               
+        </div>
         <div class="dropdown" id="undirected-dropdown-adjacency-list">
             <button id="dropdown-btn" onclick="toggleDropdown(this)">
                 <i class="fas fa-chevron-down"></i> Список суміжності
@@ -112,7 +112,7 @@
                 <button class="execute-btn" onclick="executeFunction('undirected-adjacency-list')">Виконати</button>
                 <div class="result" id="undirected-adjacency-list-result"></div>
             </div>
-        </div>        
+        </div>
         <div class="dropdown" id="undirected-dropdown-edge-list">
             <button id="dropdown-btn" onclick="toggleDropdown(this)">
                 <i class="fas fa-chevron-down"></i> Список ребер
@@ -122,7 +122,7 @@
                 <button class="execute-btn" onclick="executeFunction('undirected-edge-list')">Виконати</button>
                 <div class="result" id="undirected-edge-list-result"></div>
             </div>
-        </div>        
+        </div>
         <div class="dropdown" id="undirected-dropdown-incidence-matrix">
             <button id="dropdown-btn" onclick="toggleDropdown(this)">
                 <i class="fas fa-chevron-down"></i> Матриця інцидентності
@@ -132,7 +132,68 @@
                 <button class="execute-btn" onclick="executeFunction('undirected-incidence-matrix')">Виконати</button>
                 <div class="result" id="undirected-incidence-matrix-result"></div>
             </div>
-        </div>     
+        </div>
+        <div class="dropdown" id="undirected-dropdown-distance-matrix">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Матриця відстаней
+            </button>
+            <div class="dropdown-content">
+                <p>Матриця, що показує відстані між вершинами.</p>
+                <button class="execute-btn" onclick="executeFunction('undirected-distance-matrix')">Виконати</button>
+                <div class="result" id="undirected-distance-matrix-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="undirected-dropdown-eccentricities-vertices">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Ексцентриситети вершин
+            </button>
+            <div class="dropdown-content">
+                <p>Максимальна відстань від даної вершини до будь-якої іншої вершини в графі.</p>
+                <button class="execute-btn"
+                    onclick="executeFunction('undirected-eccentricities-vertices')">Виконати</button>
+                <div class="result" id="undirected-eccentricities-vertices-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="undirected-dropdown-radius-graph">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Радіус графа
+            </button>
+            <div class="dropdown-content">
+                <p>Найменший ексцентриситет серед усіх вершин графа.</p>
+                <button class="execute-btn" onclick="executeFunction('undirected-radius-graph')">Виконати</button>
+                <div class="result" id="undirected-radius-graph-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="undirected-dropdown-diameter-graph">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Діаметр графа
+            </button>
+            <div class="dropdown-content">
+                <p>Найбільший ексцентриситет серед усіх вершин графа.</p>
+                <button class="execute-btn" onclick="executeFunction('undirected-diameter-graph')">Виконати</button>
+                <div class="result" id="undirected-diameter-graph-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="undirected-dropdown-center-graph">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Центр графа
+            </button>
+            <div class="dropdown-content">
+                <p>Множина всіх вершин, ексцентриситет яких дорівнює радіусу графа.</p>
+                <button class="execute-btn" onclick="executeFunction('undirected-center-graph')">Виконати</button>
+                <div class="result" id="undirected-center-graph-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="undirected-dropdown-cyclomatic-number">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Цикломатичне число
+            </button>
+            <div class="dropdown-content">
+                <p>Параметр, що показує кількість незалежних циклів у графі.</p>
+                <button class="execute-btn" onclick="executeFunction('undirected-cyclomatic-number')">Виконати</button>
+                <div class="result" id="undirected-cyclomatic-number-result"></div>
+            </div>
+        </div>
         <!--------------------------------------------------------- 
         ------------------ Орієнтований граф ----------------------
         ---------------------------------------------------------->
@@ -176,7 +237,7 @@
                 <button class="execute-btn" onclick="executeFunction('directed-adjacency-matrix')">Виконати</button>
                 <div class="result" id="directed-adjacency-matrix-result"></div>
             </div>
-        </div>               
+        </div>
         <div class="dropdown" id="directed-dropdown-adjacency-list">
             <button id="dropdown-btn" onclick="toggleDropdown(this)">
                 <i class="fas fa-chevron-down"></i> Список суміжності
@@ -186,7 +247,7 @@
                 <button class="execute-btn" onclick="executeFunction('directed-adjacency-list')">Виконати</button>
                 <div class="result" id="directed-adjacency-list-result"></div>
             </div>
-        </div>        
+        </div>
         <div class="dropdown" id="directed-dropdown-edge-list">
             <button id="dropdown-btn" onclick="toggleDropdown(this)">
                 <i class="fas fa-chevron-down"></i> Список ребер
@@ -196,7 +257,7 @@
                 <button class="execute-btn" onclick="executeFunction('directed-edge-list')">Виконати</button>
                 <div class="result" id="directed-edge-list-result"></div>
             </div>
-        </div>        
+        </div>
         <div class="dropdown" id="directed-dropdown-incidence-matrix">
             <button id="dropdown-btn" onclick="toggleDropdown(this)">
                 <i class="fas fa-chevron-down"></i> Матриця інцидентності
@@ -206,10 +267,70 @@
                 <button class="execute-btn" onclick="executeFunction('directed-incidence-matrix')">Виконати</button>
                 <div class="result" id="directed-incidence-matrix-result"></div>
             </div>
-        </div>     
-
+        </div>
+        <div class="dropdown" id="directed-dropdown-distance-matrix">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Матриця відстаней
+            </button>
+            <div class="dropdown-content">
+                <p>Матриця, що показує відстані між вершинами.</p>
+                <button class="execute-btn" onclick="executeFunction('directed-distance-matrix')">Виконати</button>
+                <div class="result" id="directed-distance-matrix-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="directed-dropdown-eccentricities-vertices">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Ексцентриситети вершин
+            </button>
+            <div class="dropdown-content">
+                <p>Максимальна відстань від даної вершини до будь-якої іншої вершини в графі.</p>
+                <button class="execute-btn"
+                    onclick="executeFunction('directed-eccentricities-vertices')">Виконати</button>
+                <div class="result" id="directed-eccentricities-vertices-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="directed-dropdown-radius-graph">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Радіус графа
+            </button>
+            <div class="dropdown-content">
+                <p>Найменший ексцентриситет серед усіх вершин графа.</p>
+                <button class="execute-btn" onclick="executeFunction('directed-radius-graph')">Виконати</button>
+                <div class="result" id="directed-radius-graph-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="directed-dropdown-diameter-graph">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Діаметр графа
+            </button>
+            <div class="dropdown-content">
+                <p>Найбільший ексцентриситет серед усіх вершин графа.</p>
+                <button class="execute-btn" onclick="executeFunction('directed-diameter-graph')">Виконати</button>
+                <div class="result" id="directed-diameter-graph-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="directed-dropdown-center-graph">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Центр графа
+            </button>
+            <div class="dropdown-content">
+                <p>Множина всіх вершин, ексцентриситет яких дорівнює радіусу графа.</p>
+                <button class="execute-btn" onclick="executeFunction('directed-center-graph')">Виконати</button>
+                <div class="result" id="directed-center-graph-result"></div>
+            </div>
+        </div>
+        <div class="dropdown" id="directed-dropdown-cyclomatic-number">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Цикломатичне число
+            </button>
+            <div class="dropdown-content">
+                <p>Параметр, що показує кількість незалежних циклів у графі.</p>
+                <button class="execute-btn" onclick="executeFunction('directed-cyclomatic-number')">Виконати</button>
+                <div class="result" id="directed-cyclomatic-number-result"></div>
+            </div>
+        </div>
     </div>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.1/canvg.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="assets/js/d3.js" defer></script>
