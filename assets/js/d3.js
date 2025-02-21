@@ -998,6 +998,7 @@ function updateToolbar() {
         document.getElementById('undirected-dropdown-adjacency-list'),
         document.getElementById('undirected-dropdown-edge-list'),
         document.getElementById('undirected-dropdown-incidence-matrix'),
+        document.getElementById('undirected-dropdown-distance-matrix'),
         document.getElementById('undirected-dropdown-eccentricities-vertices'),
         document.getElementById('undirected-dropdown-radius-graph'),
         document.getElementById('undirected-dropdown-diameter-graph'),
