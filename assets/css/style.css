@@ -248,6 +248,60 @@ td {
 .vertex:hover {
     background-color: red; 
 }
+/* Медіа-запити для мобільних пристроїв */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column; /* Легше для мобільних */
+    }
+
+    .workspace {
+        flex-direction: row; /* В інтерфейсі маємо два основні блоки - інструменти і canvas */
+        padding: 5px;
+    }
+
+    .toolbar {
+        flex-direction: column; /* Кнопки підуть один під одним на мобільних */
+        gap: 5px;
+        height: 100%; /* Забезпечуємо достатню висоту для всіх кнопок */
+        overflow-y: auto; /* Додаємо вертикальну прокрутку */
+    }
+
+    .canvas-container {
+        height: calc(100vh - 60px); /* Забираємо висоту тулбара */
+    }
+
+    .functions-panel {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    .dropdown #dropdown-btn {
+        font-size: 14px; /* Зменшуємо розмір шрифту для мобільних */
+    }
+
+    .grid {
+        background-size: 30px 30px; /* Зменшуємо сітку для мобільних */
+    }
+}
+
+@media (max-width: 480px) {
+    .toolbar button {
+        font-size: 18px; /* Зменшуємо розмір кнопок для маленьких екранів */
+        padding: 8px;
+    }
+
+    .grid {
+        background-size: 20px 20px; /* Ще менший розмір сітки */
+    }
+
+    .dropdown #dropdown-btn {
+        padding: 10px; /* Зменшуємо padding для кнопки */
+    }
+
+    .toolbar {
+        height: auto; /* Встановлюємо автоматичну висоту для панелі інструментів */
+    }
+}
 
 /* .vertex {
     width: 30px;
