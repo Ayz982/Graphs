@@ -85,12 +85,12 @@ canvas.on("click", function (event) {
 function createVertex(x, y) {
     const vertexID = vertexCount++;
     const vertex = canvasGroup.append("circle")
-        .attr("cx", x).attr("cy", y).attr("r", 15)
+        .attr("cx", x).attr("cy", y).attr("r", 20)
         .attr("fill", "black").attr("class", "vertex")
         .style("cursor", "pointer");
 
     canvasGroup.append("text")
-        .attr("x", x).attr("y", y - 20)
+        .attr("x", x).attr("y", y)
         .attr("text-anchor", "middle")
         .text(vertexID).attr("class", "vertex-label");
 
@@ -119,51 +119,86 @@ function handleEdgeCreation(vertexID) {
         selectedVertex = null;
     }
 }
-
-
-function createLoop(vertex) {
-    const [x, y] = vertices.get(vertex);
-    const radius = 30, loopOffset = 15;
-    canvasGroup.append("path")
-        .attr("d", `M${x},${y - radius} A${radius},${radius} 0 1,1 ${x},${y - radius + loopOffset}`)
-        .attr("stroke", "black").attr("stroke-width", 3)
-        .attr("fill", "none").attr("class", "edge");
-
-    canvasGroup.append("text")
-        .attr("x", x).attr("y", y - radius - 10)
-        .attr("text-anchor", "middle")
-        .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
-
-    graph.addEdge(vertex, vertex);
+function handleEdgeCreation(vertexID) {
+    if (!selectedVertex) {
+        selectedVertex = vertexID;
+    } else if (selectedVertex !== vertexID) {
+        if (modes.edge) {
+            createEdge(selectedVertex, vertexID);
+        } else if (modes.directedEdge) {
+            createDirectedEdge(selectedVertex, vertexID);
+        }
+        selectedVertex = null;
+    }
 }
+
+function createLoop(vertexID) {
+    const [x, y] = vertices.get(vertexID); // Отримуємо координати вершини
+    const radius = 30; // Радіус петлі
+    const offsetY = 20; // Зміщення петлі вгору на 20 пікселів
+    const offsetX = 25; // Зміщення вправо на 20 пікселів
+
+    // Створюємо патерн для малювання петлі
+    // Перша дуга (верхня частина) з 0 до 180 градусів
+    // Друга дуга (нижня права частина) з 180 до 360 градусів
+    const loopPath = `M ${x - radius + offsetX} ${y - offsetY} 
+                      A ${radius} ${radius} 0 0 1 ${x + radius + offsetX} ${y - offsetY}
+                      A ${radius} ${radius} 0 0 1 ${x + 17} ${y + 10}`;
+
+    // Додаємо саму петлю з класом для стилізації
+    canvasGroup.append("path")
+        .attr("d", loopPath)
+        .attr("class", "edge-loop");
+
+    // Додаємо текст з індикацією петлі, зміщений вгору
+    canvasGroup.append("text")
+        .attr("x", x + offsetX) // Зміщуємо текст вправо
+        .attr("y", y - radius - offsetY - 10)  // Зміщуємо текст вгору
+        .attr("text-anchor", "middle")
+        .text(String.fromCharCode(96 + edgeCount++))
+        .attr("class", "edge-label");
+
+    // Додаємо петлю в граф
+    graph.addEdge(vertexID, vertexID);
+}
+
+
+
 
 function createEdge(v1, v2) {
     if (!vertices.has(v1) || !vertices.has(v2)) return;
     const [x1, y1] = vertices.get(v1);
     const [x2, y2] = vertices.get(v2);
+    const offset = 20;
+    const dx = x2 - x1, dy = y2 - y1;
+    const length = Math.sqrt(dx * dx + dy * dy);
+    const unitX = dx / length, unitY = dy / length;
+    const adjustedX1 = x1 + unitX * offset, adjustedY1 = y1 + unitY * offset;
+    const adjustedX2 = x2 - unitX * offset, adjustedY2 = y2 - unitY * offset;
 
     canvasGroup.append("line")
-        .attr("x1", x1).attr("y1", y1).attr("x2", x2).attr("y2", y2)
+        .attr("x1", adjustedX1).attr("y1", adjustedY1)
+        .attr("x2", adjustedX2).attr("y2", adjustedY2)
         .attr("stroke", "black").attr("stroke-width", 3).attr("class", "edge");
 
     canvasGroup.append("text")
-        .attr("x", (x1 + x2) / 2).attr("y", (y1 + y2) / 2 - 10)
+        .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
         .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
         .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
 
     graph.addEdge(v1, v2);
 }
 
-
 function createDirectedEdge(v1, v2) {
     const [x1, y1] = vertices.get(v1);
     const [x2, y2] = vertices.get(v2);
-    const arrowOffset = 15;
+    const offset = 20, arrowOffset = 5;
     const dx = x2 - x1, dy = y2 - y1;
     const length = Math.sqrt(dx * dx + dy * dy);
     const unitX = dx / length, unitY = dy / length;
-    const adjustedX2 = x2 - unitX * arrowOffset;
-    const adjustedY2 = y2 - unitY * arrowOffset;
+    const adjustedX1 = x1 + unitX * offset, adjustedY1 = y1 + unitY * offset;
+    const adjustedX2 = x2 - unitX * (offset + arrowOffset), adjustedY2 = y2 - unitY * (offset + arrowOffset);
 
     canvasGroup.append("defs").append("marker")
         .attr("id", "arrowhead").attr("viewBox", "0 0 10 10")
@@ -172,17 +207,20 @@ function createDirectedEdge(v1, v2) {
         .append("path").attr("d", "M0,0 L10,5 L0,10 Z").attr("fill", "black");
 
     canvasGroup.append("line")
-        .attr("x1", x1).attr("y1", y1).attr("x2", adjustedX2).attr("y2", adjustedY2)
+        .attr("x1", adjustedX1).attr("y1", adjustedY1)
+        .attr("x2", adjustedX2).attr("y2", adjustedY2)
         .attr("stroke", "black").attr("stroke-width", 3).attr("class", "edge")
         .attr("marker-end", "url(#arrowhead)");
 
     canvasGroup.append("text")
-        .attr("x", (x1 + adjustedX2) / 2).attr("y", (y1 + adjustedY2) / 2 - 10)
+        .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
         .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
         .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
-    // Додаємо ребро в граф
+
     graph.addEdge(v1, v2);
 }
+
 
 // Функція для виконання операцій за запитом
 function executeFunction(functionName) {
@@ -1213,33 +1251,50 @@ function toggleVertexMode(button) {
     }
 }
 
-
-d3.select("style").append("style").text(`
-    .vertex-label, .edge-label {
+d3.select("head").append("style").attr("type", "text/css").text(`
+    .vertex {
+        fill: white; /* Білий колір заливки */
+        stroke: black; /* Чорний контур */
+        stroke-width: 2px; /* Товщина контуру */
+        cursor: pointer;
+        r: 20px; /* Збільшений розмір вершини */
+    }
+    
+    .vertex.selected {
+        stroke: red;
+        stroke-width: 2px;
+    }
+    
+    .edge {
+        stroke: black;
+        stroke-width: 3;
+    }
+    
+    .vertex-label {
         font-size: 14px;
         font-weight: bold;
         fill: black;
-        text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7); /* Тінь для кращої видимості на фоні */
+        text-anchor: middle;
+        dominant-baseline: central; /* Вирівнювання тексту по центру */
         pointer-events: none; /* Текст не реагує на події мишки */
-        background-color: rgba(255, 255, 255, 0.7); /* Білий напівпрозорий фон для контрасту */
-        padding: 3px 8px; /* Більші відступи для фону */
-        border-radius: 5px; /* Округлі краї фону */
-        stroke: #333; /* Обводка тексту для кращої видимості */
-        stroke-width: 0.5px; /* Товщина обводки */
-        z-index: 10; /* Текст завжди на передньому плані */
     }
     
     .edge-label {
-        transform: translate(15px, 0px); /* Зміщення тексту вправо на 10px */
+        font-size: 14px;
+        font-weight: bold;
+        fill: black;
+        pointer-events: none;
+        transform: translate(15px, 0px); /* Зміщення тексту вправо */
     }
-    
-        .vertex { cursor: pointer; }
-        .vertex.selected { stroke: red; stroke-width: 2px; }
-        .edge { stroke: black; stroke-width: 3; }
-    `);
+        .edge-loop {
+    stroke: black;
+    stroke-width: 3;
+    fill: none;
+}
+`);
 
 function deleteSelected() {
-    canvasGroup.selectAll(".vertex, .edge, .edge-label, .vertex-label").remove();
+    canvasGroup.selectAll(".vertex, .edge, .edge-label, .vertex-label, .edge-loop").remove();
     vertices.clear();
     vertexCount = 1;
     edgeCount = 1;

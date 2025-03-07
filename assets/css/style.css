@@ -44,6 +44,7 @@ body {
     font-size: 14px;
     z-index: 10;
 }
+
 .canvas-container {
     width: 100%;
     height: 100vh;
@@ -53,13 +54,16 @@ body {
 }
 
 .grid {
-    width: 2000px; /* Велике полотно для масштабування */
+    width: 2000px;
+    /* Велике полотно для масштабування */
     height: 2000px;
-    background-size: 50px 50px; /* Розмір клітинки */
+    background-size: 50px 50px;
+    /* Розмір клітинки */
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
     transform-origin: top left;
 }
+
 .functions-panel {
     flex: 1;
     background: #f8f8f8;
@@ -150,6 +154,7 @@ body {
     word-wrap: break-word;
     max-width: 100%;
 }
+
 #undirected-vertex-degree-input,
 #directed-vertex-degree-input {
     padding: 10px;
@@ -160,19 +165,21 @@ body {
     max-width: 300px;
     font-size: 16px;
     box-sizing: border-box;
-  }
-  
-  #undirected-vertex-degree-input::placeholder,
-  #directed-vertex-degree-input::placeholder {
+}
+
+#undirected-vertex-degree-input::placeholder,
+#directed-vertex-degree-input::placeholder {
     color: #aaa;
-  }
-  
+}
+
 @media (max-width: 768px) {
+
     #undirected-vertex-degree-input,
     #directed-vertex-degree-input {
         font-size: 14px;
         padding: 8px;
-      }
+    }
+
     .functions-panel {
         padding: 10px;
     }
@@ -189,7 +196,8 @@ body {
 }
 
 button.active {
-    background-color: #4CAF50; /* Синій колір для акценту */
+    background-color: #4CAF50;
+    /* Синій колір для акценту */
     color: white;
     border-radius: 5px;
 }
@@ -198,6 +206,7 @@ button.active {
     background-color: #4CAF50;
     color: white;
 }
+
 /* Загальні стилі для випадаючого меню */
 #graphType {
     padding: 8px;
@@ -229,11 +238,7 @@ button.active {
         padding: 4px;
     }
 }
-.vertex-label, .edge-label {
-    font-size: 15px;
-    font-weight: bold;
-    color: black;
-}
+
 table {
     border-collapse: collapse;
     width: 100%;
@@ -245,29 +250,32 @@ td {
     text-align: center;
 }
 
-.vertex:hover {
-    background-color: red; 
-}
 /* Медіа-запити для мобільних пристроїв */
 @media (max-width: 768px) {
     body {
-        flex-direction: column; /* Легше для мобільних */
+        flex-direction: column;
+        /* Легше для мобільних */
     }
 
     .workspace {
-        flex-direction: row; /* В інтерфейсі маємо два основні блоки - інструменти і canvas */
+        flex-direction: row;
+        /* В інтерфейсі маємо два основні блоки - інструменти і canvas */
         padding: 5px;
     }
 
     .toolbar {
-        flex-direction: column; /* Кнопки підуть один під одним на мобільних */
+        flex-direction: column;
+        /* Кнопки підуть один під одним на мобільних */
         gap: 5px;
-        height: 100%; /* Забезпечуємо достатню висоту для всіх кнопок */
-        overflow-y: auto; /* Додаємо вертикальну прокрутку */
+        height: 100%;
+        /* Забезпечуємо достатню висоту для всіх кнопок */
+        overflow-y: auto;
+        /* Додаємо вертикальну прокрутку */
     }
 
     .canvas-container {
-        height: calc(100vh - 60px); /* Забираємо висоту тулбара */
+        height: calc(100vh - 60px);
+        /* Забираємо висоту тулбара */
     }
 
     .functions-panel {
@@ -276,34 +284,45 @@ td {
     }
 
     .dropdown #dropdown-btn {
-        font-size: 14px; /* Зменшуємо розмір шрифту для мобільних */
+        font-size: 14px;
+        /* Зменшуємо розмір шрифту для мобільних */
     }
 
     .grid {
-        background-size: 30px 30px; /* Зменшуємо сітку для мобільних */
+        background-size: 30px 30px;
+        /* Зменшуємо сітку для мобільних */
     }
 }
 
 @media (max-width: 480px) {
     .toolbar button {
-        font-size: 18px; /* Зменшуємо розмір кнопок для маленьких екранів */
+        font-size: 18px;
+        /* Зменшуємо розмір кнопок для маленьких екранів */
         padding: 8px;
     }
 
     .grid {
-        background-size: 20px 20px; /* Ще менший розмір сітки */
+        background-size: 20px 20px;
+        /* Ще менший розмір сітки */
     }
 
     .dropdown #dropdown-btn {
-        padding: 10px; /* Зменшуємо padding для кнопки */
+        padding: 10px;
+        /* Зменшуємо padding для кнопки */
     }
 
     .toolbar {
-        height: auto; /* Встановлюємо автоматичну висоту для панелі інструментів */
+        height: auto;
+        /* Встановлюємо автоматичну висоту для панелі інструментів */
     }
 }
 
-/* .vertex {
+/* 
+
+.vertex:hover {
+    background-color: red; 
+}
+    .vertex {
     width: 30px;
     height: 30px;
     background-color: #007bff;
@@ -318,7 +337,11 @@ td {
     color: white;
     font-size: 14px;
 }
-
+.vertex-label, .edge-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: black;
+}
 .vertex-label {
     position: absolute;
     bottom: 40px;
@@ -342,4 +365,3 @@ td {
 }
 
  */
-
