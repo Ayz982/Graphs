@@ -73,8 +73,9 @@ canvas.on("click", function (event) {
             createVertex(x, y);
         }
     } else if (modes.createText) {
-        // Якщо активовано режим створення тексту
         createText(x, y); // Викликаємо функцію для створення тексту
+    } else if (modes.editText) {
+        editText(event);
     } else {
         const clickedVertex = getVertexAt(x, y);
         if (!clickedVertex) return;
@@ -86,6 +87,89 @@ canvas.on("click", function (event) {
         }
     }
 });
+
+function editText(event) {
+    const [mouseX, mouseY] = d3.pointer(event, canvas.node());
+    const x = mouseX / scale;
+    const y = mouseY / scale;
+
+    // Знаходимо найближчий текстовий елемент до точки кліку
+    const clickedText = canvasGroup.selectAll(".text-element")
+        .filter(function () {
+            const bbox = this.getBBox(); // Отримуємо межі елемента
+            return (
+                x >= bbox.x &&
+                x <= bbox.x + bbox.width &&
+                y >= bbox.y &&
+                y <= bbox.y + bbox.height
+            );
+        });
+
+    if (!clickedText.empty()) {
+        // Перевірка, чи вже є відкритий інпут для редагування
+        const existingInput = d3.select(canvas.node()).select("foreignObject");
+        if (!existingInput.empty()) {
+            existingInput.remove(); // Видаляємо попередній інпут перед створенням нового
+        }
+
+        const currentText = clickedText.text();
+        const textElement = clickedText.node();
+
+        // Отримуємо розмір тексту
+        const bbox = textElement.getBBox(); // Отримуємо bbox після того, як знайдено елемент
+
+        // Створюємо елемент введення для редагування
+        const inputBox = d3.select(canvas.node())
+            .append("foreignObject")
+            .attr("x", x)
+            .attr("y", y)
+            .attr("width", bbox.width * 3)  // Збільшена ширина для кращої видимості
+            .attr("height", bbox.height * 3)  // Збільшена висота
+            .append("xhtml:input")
+            .attr("type", "text")
+            .attr("value", currentText)
+            .style("width", "100%")
+            .style("height", "100%")
+            .style("font-size", "18px")  // Збільшено шрифт для зручності
+            .style("border", "2px solid #4CAF50") // Зелену рамку для виділення
+            .style("padding", "10px")  // Збільшені відступи
+            .style("background-color", "#f9f9f9") // Легкий фон
+            .style("border-radius", "5px") // Заокруглені кути
+            .style("box-sizing", "border-box") // Щоб враховувати відступи
+            .style("outline", "none"); // Заборона на обведення при фокусі
+
+        // Автоматичне виділення тексту
+        inputBox.node().select();
+        
+        // Обробник для зміни розміру поля введення
+        inputBox.on("input", function () {
+            const inputWidth = this.scrollWidth; // Отримуємо ширину тексту
+            const inputHeight = this.scrollHeight; // Отримуємо висоту тексту
+            d3.select(this.parentNode)
+                .attr("width", inputWidth + 2) // Додаємо відступи
+        });
+
+        // Обробник для завершення редагування
+        inputBox.on("blur", function () {
+            const newText = this.value.trim();
+            if (newText !== "") {
+                clickedText.text(newText); // Оновлюємо текст
+            }
+            inputBox.remove(); // Видаляємо поле редагування
+        });
+
+        // Обробник для натискання Enter
+        inputBox.on("keydown", function (e) {
+            if (e.key === "Enter") {
+                const newText = this.value.trim();
+                if (newText !== "") {
+                    clickedText.text(newText); // Оновлюємо текст
+                }
+                inputBox.remove(); // Видаляємо поле редагування
+            }
+        });
+    }
+}
 
 function createText(x, y) {
     const newText = prompt("Введіть текст:"); // Запит на введення тексту
@@ -1106,7 +1190,8 @@ function updateToolbar() {
 
 
 function blockButtons() {
-    const buttons = document.querySelectorAll('button[title="Змінити текст"], button[title="Формат xlsx"], button[title="Обрати"], button[title="Переміщення"]');
+    // button[title="Змінити текст"], 
+    const buttons = document.querySelectorAll('button[title="Формат xlsx"], button[title="Обрати"], button[title="Переміщення"]');
 
     buttons.forEach(button => {
         button.disabled = true; // Робимо кнопки неклікабельними
