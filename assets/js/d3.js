@@ -15,6 +15,7 @@ const modes = {
     edge: false,
     directedEdge: false,
     loop: false,
+    createText: false,
     editText: false,
     select: false,
     move: false,
@@ -63,13 +64,17 @@ const graph = new Graph();
 
 canvas.on("click", function (event) {
     const [mouseX, mouseY] = d3.pointer(event, this);
-    const x = snapToGrid(mouseX / scale);
-    const y = snapToGrid(mouseY / scale);
+     // Використовуємо snapToGrid лише для всіх елементів, окрім тексту
+     const x = modes.createText ? mouseX / scale : snapToGrid(mouseX / scale); // Текст не прив'язується до сітки
+     const y = modes.createText ? mouseY / scale : snapToGrid(mouseY / scale); // Текст не прив'язується до сітки
 
     if (modes.vertex) {
         if (![...vertices.values()].some(([vx, vy]) => vx === x && vy === y)) {
             createVertex(x, y);
         }
+    } else if (modes.createText) {
+        // Якщо активовано режим створення тексту
+        createText(x, y); // Викликаємо функцію для створення тексту
     } else {
         const clickedVertex = getVertexAt(x, y);
         if (!clickedVertex) return;
@@ -81,6 +86,20 @@ canvas.on("click", function (event) {
         }
     }
 });
+
+function createText(x, y) {
+    const newText = prompt("Введіть текст:"); // Запит на введення тексту
+
+    if (newText !== null && newText.trim() !== "") {
+        // Додаємо текст до полотна в точці кліку
+        canvasGroup.append("text")
+            .attr("x", x)
+            .attr("y", y)
+            .attr("text-anchor", "middle")
+            .attr("class", "text-element")
+            .text(newText);
+    }
+}
 
 function createVertex(x, y) {
     const vertexID = vertexCount++;
@@ -150,13 +169,13 @@ function createLoop(vertexID) {
         .attr("d", loopPath)
         .attr("class", "edge-loop");
 
-    // Додаємо текст з індикацією петлі, зміщений вгору
-    canvasGroup.append("text")
-        .attr("x", x + offsetX) // Зміщуємо текст вправо
-        .attr("y", y - radius - offsetY - 10)  // Зміщуємо текст вгору
-        .attr("text-anchor", "middle")
-        .text(String.fromCharCode(96 + edgeCount++))
-        .attr("class", "edge-label");
+    // // Додаємо текст з індикацією петлі, зміщений вгору
+    // canvasGroup.append("text")
+    //     .attr("x", x + offsetX) // Зміщуємо текст вправо
+    //     .attr("y", y - radius - offsetY - 10)  // Зміщуємо текст вгору
+    //     .attr("text-anchor", "middle")
+    //     .text(String.fromCharCode(96 + edgeCount++))
+    //     .attr("class", "edge-label");
 
     // Додаємо петлю в граф
     graph.addEdge(vertexID, vertexID);
@@ -181,11 +200,11 @@ function createEdge(v1, v2) {
         .attr("x2", adjustedX2).attr("y2", adjustedY2)
         .attr("stroke", "black").attr("stroke-width", 3).attr("class", "edge");
 
-    canvasGroup.append("text")
-        .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
-        .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")
-        .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
+    // canvasGroup.append("text")
+    //     .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
+    //     .attr("text-anchor", "middle")
+    //     .attr("dominant-baseline", "middle")
+    //     .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
 
     graph.addEdge(v1, v2);
 }
@@ -212,11 +231,11 @@ function createDirectedEdge(v1, v2) {
         .attr("stroke", "black").attr("stroke-width", 3).attr("class", "edge")
         .attr("marker-end", "url(#arrowhead)");
 
-    canvasGroup.append("text")
-        .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
-        .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")
-        .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
+    // canvasGroup.append("text")
+    //     .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
+    //     .attr("text-anchor", "middle")
+    //     .attr("dominant-baseline", "middle")
+    //     .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
 
     graph.addEdge(v1, v2);
 }
@@ -1214,6 +1233,15 @@ function editTextMode(button) {
         setActiveButton(button);
     }
 }
+function toggleCreateTextMode(button) {
+    if (modes.createText) {
+        resetModes();
+    } else {
+        modes.createText = true;
+        resetOtherModes(["createText"]);
+        setActiveButton(button);
+    }
+}
 function toggleLoopMode(button) {
     if (modes.loop) {
         resetModes();
@@ -1291,10 +1319,19 @@ d3.select("head").append("style").attr("type", "text/css").text(`
     stroke-width: 3;
     fill: none;
 }
+    /* Стилізація для текстових елементів */
+.text-element {
+    font-size: 16px;
+    fill: black;
+    font-weight: bold;
+    pointer-events: all; /* Дозволяє взаємодіяти з текстом (якщо потрібно) */
+    user-select: none; /* Не дозволяє виділяти текст */
+}
+
 `);
 
 function deleteSelected() {
-    canvasGroup.selectAll(".vertex, .edge, .edge-label, .vertex-label, .edge-loop").remove();
+    canvasGroup.selectAll(".vertex, .edge, .edge-label, .vertex-label, .edge-loop, .text-element").remove();
     vertices.clear();
     vertexCount = 1;
     edgeCount = 1;
