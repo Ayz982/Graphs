@@ -1,0 +1,500 @@
+/*=============== GOOGLE FONTS ===============*/
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap");
+
+/*=============== VARIABLES CSS ===============*/
+:root {
+  --header-height: 3.5rem;
+  /*========== Colors ==========*/
+  /*Color mode HSL(hue, saturation, lightness)*/
+  --black-color: #fff;
+  --black-color-light: hsl(0, 0%, 99%);
+  --black-color-lighten: hsl(0, 0%, 99%);
+  --white-color: hsl(220, 24%, 12%);
+  --body-color: hsl(0, 0%, 100%);
+  --color-white-100: hsl(206, 0%, 100%);
+  --color-white-200: hsl(206, 0%, 90%);
+  --color-white-300: hsl(206, 0%, 80%);
+  --color-white-400: hsl(206, 0%, 65%);
+  --color-white-500: hsl(206, 0%, 50%);
+  --color-black-100: hsl(217, 30%, 18%);
+  --color-black-200: hsl(217, 27%, 15%);
+  --color-black-300: hsl(217, 27%, 12%);
+  --color-black-400: hsl(217, 52%, 9%);
+  --color-blue-100: hsl(217, 100%, 81%);
+  --color-blue-200: hsl(215, 50%, 77%);
+  --color-blue-300: hsl(215, 94%, 68%);
+  --color-blue-400: hsl(215, 91%, 60%);
+  --color-blue-500: hsl(215, 83%, 53%);
+  --color-blue-600: hsl(246, 100%, 39%);
+  --color-blue-700: hsl(243, 63%, 25%);
+  --shadow-small: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+     0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+     0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+     0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /*========== Font and typography ==========*/
+  /*.5rem = 8px | 1rem = 16px ...*/
+  --body-font: "Montserrat", sans-serif;
+  --normal-font-size: .938rem;
+
+  /*========== Font weight ==========*/
+  --font-regular: 400;
+  --font-semi-bold: 600;
+
+  /*========== z index ==========*/
+  --z-tooltip: 10;
+  --z-fixed: 100;
+  
+}
+
+/*========== Responsive typography ==========*/
+@media screen and (min-width: 1024px) {
+  :root {
+    --normal-font-size: 1rem;
+  }
+}
+/*=============== GLOBAL RESET ===============*/
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  background-color: var(--body-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;  /* Гарантує, що сторінка заповнює всю висоту */
+}
+ul {
+  list-style: none;
+  /* Color highlighting when pressed on mobile devices */
+  -webkit-tap-highlight-color: transparent;
+}
+.nav__logo {
+  font-size:1.7rem;
+}
+a {
+  text-decoration: none;
+}
+
+/*=============== REUSABLE CSS CLASSES ===============*/
+.container {
+  max-width: 1120px;
+  margin-inline: 1.5rem;
+}
+
+/*=============== HEADER ===============*/
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var( --color-white-100);
+  box-shadow: var(--shadow-medium);
+  z-index: var(--z-fixed);
+}
+
+/*=============== NAV ===============*/
+.nav {
+  height: var(--header-height);
+}
+.nav li a:hover {
+  color: var(--color-blue-600);
+}
+.nav__logo {
+  color: var(--color-blue-500);
+} 
+.nav__burger, 
+.nav__close {
+  color: var(--color-black-400);
+}
+.nav__data {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav__logo {
+  display: inline-flex;
+  align-items: center;
+  column-gap: .25rem;
+  font-weight: var(--font-semi-bold);
+  /* Color highlighting when pressed on mobile devices */
+  /*-webkit-tap-highlight-color: transparent;*/
+}
+
+.nav__logo i {
+  font-weight: initial;
+  font-size: 1.7rem;
+}
+
+.nav__toggle {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+.nav__burger, 
+.nav__close {
+  position: absolute;
+  width: max-content;
+  height: max-content;
+  inset: 0;
+  margin: auto;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: opacity .1s, transform .4s;
+}
+
+.nav__close {
+  opacity: 0;
+}
+
+/* Navigation for mobile devices */
+@media screen and (max-width: 1118px) {
+  .nav__menu {
+    position: absolute;
+    left: 0;
+    top: 2.5rem;
+    width: 100%;
+    height: calc(100vh - 3.5rem);
+    overflow: auto;
+    pointer-events: none;
+    opacity: 0;
+    transition: top .4s, opacity .3s;
+  }
+  .nav__menu::-webkit-scrollbar {
+    width: 0;
+  }
+  .nav__list {
+    background-color: var(--color-white-100);
+    padding-top: 1rem;
+  }
+}
+
+.nav__link {
+  color: var(--white-color);
+  background-color: var( --color-white-100);
+  font-weight: var(--font-semi-bold);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color .3s;
+}
+
+.nav__link:hover {
+  background-color: var(--color-blue-200);
+}
+
+/* Show menu */
+.show-menu {
+  opacity: 1;
+  top: 3.5rem;
+  pointer-events: initial;
+}
+
+/* Show icon */
+.show-icon .nav__burger {
+  opacity: 0;
+  transform: rotate(90deg);
+}
+.show-icon .nav__close {
+  opacity: 1;
+  transform: rotate(90deg);
+}
+
+/*=============== DROPDOWN ===============*/
+.dropdown__item {
+  cursor: pointer;
+}
+
+.dropdown__arrow {
+  font-size: 1.25rem;
+  font-weight: initial;
+  transition: transform .4s;
+}
+
+.dropdown__link, 
+.dropdown__sublink {
+  padding: 1.25rem 1.25rem 1.25rem 2.5rem;
+  color: var(--white-color);
+  background-color: var(--color-white-100);
+  display: flex;
+  align-items: center;
+  column-gap: .5rem;
+  font-weight: var(--font-semi-bold);
+  transition: background-color .3s;
+}
+
+.dropdown__link i, 
+.dropdown__sublink i {
+  font-size: 1.25rem;
+  font-weight: initial;
+}
+
+.dropdown__link:hover, 
+.dropdown__sublink:hover {
+  background-color: var(--color-blue-100);
+}
+
+.dropdown__menu, 
+.dropdown__submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s ease-out;
+}
+
+/* Show dropdown menu & submenu */
+.dropdown__item:hover .dropdown__menu, 
+.dropdown__subitem:hover > .dropdown__submenu {
+  max-height: 1000px;
+  transition: max-height .4s ease-in;
+}
+
+/* Rotate dropdown icon */
+.dropdown__item:hover .dropdown__arrow {
+  transform: rotate(180deg);
+}
+
+/*=============== DROPDOWN SUBMENU ===============*/
+.dropdown__add {
+  margin-left: auto;
+}
+
+.dropdown__sublink {
+  background-color: var(--color-white-200);
+}
+
+/*=============== BREAKPOINTS ===============*/
+/* For small devices */
+@media screen and (max-width: 340px) {
+  .container {
+    margin-inline: 1rem;
+  }
+
+  .nav__link {
+    padding-inline: 1rem;
+  }
+  
+}
+
+/* For large devices */
+@media screen and (min-width: 1118px) {
+
+  .container {
+    margin-inline: auto;
+  }
+  .nav {
+    height: calc(var(--header-height) + 2rem);
+    display: flex;
+    justify-content: space-between;
+  }
+  .nav__toggle {
+    display: none;
+  }
+  .nav__list {
+    height: 100%;
+    display: flex;
+    column-gap: 3rem;
+  }
+  .nav__link {
+    height: 100%;
+    padding: 0;
+    justify-content: initial;
+    column-gap: .25rem;
+  }
+  .nav__link:hover {
+    background-color: transparent;
+  }
+
+  .dropdown__item, 
+  .dropdown__subitem {
+    position: relative;
+  }
+
+  .dropdown__menu, 
+  .dropdown__submenu {
+    max-height: initial;
+    overflow: initial;
+    position: absolute;
+    left: 0;
+    top: 6rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s, top .3s;
+  }
+
+  .dropdown__link, 
+  .dropdown__sublink {
+    padding-inline: 1rem 3.5rem;
+  }
+
+  .dropdown__subitem .dropdown__link {
+    padding-inline: 1rem;
+  }
+
+  .dropdown__submenu {
+    position: absolute;
+    left: 100%;
+    top: .5rem;
+  }
+
+  /* Show dropdown menu */
+  .dropdown__item:hover .dropdown__menu {
+    opacity: 1;
+    top: 5.5rem;
+    pointer-events: initial;
+    transition: top .3s;
+  }
+
+  /* Show dropdown submenu */
+  .dropdown__subitem:hover > .dropdown__submenu {
+    opacity: 1;
+    top: 0;
+    pointer-events: initial;
+    transition: top .3s;
+  }
+}
+
+main {
+    flex-grow: 1; /* Дозволяє основному вмісту заповнювати доступну висоту */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center; /* Вирівнює по центру */
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px; /* Максимальна ширина контенту */
+  }
+  
+  .intro__text {
+    flex: 1;
+    max-width: 600px;
+    text-align: left;
+  }
+  
+  .intro__text h1 {
+    font-size: 2.5rem;
+    color: var(--color-black-200);
+    margin-bottom: 1rem;
+  }
+  
+  .intro__text p {
+    font-size: 1rem;
+    color: var(--color-black-400);
+    margin-bottom: 1.5rem;
+  }
+  
+  .intro__text .btn {
+    background-color: var(--color-blue-500);
+    color: var(--color-white-100);
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: var(--font-semi-bold);
+    border: none;
+    border-radius: 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .intro__text .btn:hover {
+    background-color: var(--color-blue-600);
+  }
+  
+  .intro__image {
+    flex: 1;
+    max-width: 500px;
+    text-align: center;
+  }
+  
+  .intro__image img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+  }
+  
+  /*=========== ADAPTIVE STYLES ============*/
+  @media (max-width: 768px) {
+    .intro {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .intro__text {
+      max-width: 100%;
+      margin-bottom: 2rem;
+    }
+  
+    .intro__image {
+      max-width: 100%;
+    }
+  
+    .intro__text h1 {
+      font-size: 2rem;
+    }
+  
+    .intro__text p {
+      font-size: 0.9rem;
+    }
+  
+    .intro__text .btn {
+      padding: 0.6rem 1.5rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+/*=============== FOOTER ===============*/
+/*=============== FOOTER ===============*/
+.footer {
+    background-color: var(--color-black-400);
+    color: var(--color-white-200);
+    text-align: center;
+    padding: 1.2rem 0;
+    font-size: var(--normal-font-size);
+    font-weight: var(--font-regular);
+    box-shadow: var(--shadow-small);
+    margin-top: auto; /* Залишає футер внизу, навіть якщо контент не заповнює всю сторінку */
+  }
+  
+  .footer__content {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  
+  .footer__text {
+    margin-bottom: 0.3rem;
+  }
+  
+  .footer__link {
+    color: var(--color-blue-400);
+    font-weight: var(--font-semi-bold);
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .footer__link:hover {
+    color: var(--color-blue-500);
+    text-decoration: underline;
+  }

@@ -146,7 +146,7 @@ function editText(event) {
             const inputWidth = this.scrollWidth; // Отримуємо ширину тексту
             const inputHeight = this.scrollHeight; // Отримуємо висоту тексту
             d3.select(this.parentNode)
-                .attr("width", inputWidth + 2) // Додаємо відступи
+                .attr("width", inputWidth + 20) // Додаємо відступи
         });
 
         // Обробник для завершення редагування
@@ -1542,3 +1542,28 @@ function saveSelectedGraph(minX, minY, width, height) {
 document.getElementById("canvas").addEventListener("mousedown", startSelection);
 document.addEventListener("mousemove", updateSelection);
 document.addEventListener("mouseup", endSelection);
+
+function searchFunction() {
+    const searchInput = document.getElementById('search-input').value.toLowerCase();
+    const dropdowns = document.querySelectorAll('.dropdown');
+    const graphType = document.getElementById("graphType").value; // Тип графа
+
+    dropdowns.forEach(dropdown => {
+        const title = dropdown.querySelector('button').textContent.toLowerCase();
+        const button = dropdown.querySelector('button');
+        const isDisabled = button.disabled; // Перевіряємо, чи кнопка заблокована
+        const isUndirected = dropdown.id.startsWith('undirected'); // Перевірка на тип графа: неорієнтований
+        const isDirected = dropdown.id.startsWith('directed'); // Перевірка на тип графа: орієнтований
+
+        // Перевіряємо тип графа і чи функція активна
+        if (
+            !isDisabled &&
+            title.includes(searchInput) &&
+            ((graphType === "directed" && isDirected) || (graphType === "undirected" && isUndirected))
+        ) {
+            dropdown.style.display = 'block'; // Показуємо активні елементи, що відповідають пошуковому запиту
+        } else {
+            dropdown.style.display = 'none'; // Сховуємо заблоковані або непотрібні елементи
+        }
+    });
+}

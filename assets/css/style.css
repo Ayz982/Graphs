@@ -1,8 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap");
 body {
     display: flex;
     height: 100vh;
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: "Montserrat", sans-serif;
 }
 
 .workspace {
@@ -19,6 +20,23 @@ body {
     padding: 10px;
     background: #ddd;
     border-bottom: 2px solid #bbb;
+}
+
+.nav__logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: hsl(215, 83%, 53%); 
+    font-size: 1.5rem;
+    margin-right: 20px; 
+    font-weight: 600;
+}
+
+.nav__logo i {
+    margin-right: 8px;  
+    font-weight: initial;
+    font-size: 1.7rem;
+    color: hsl(215, 83%, 53%); 
 }
 
 .toolbar button {
@@ -74,6 +92,65 @@ body {
     border-left: 2px solid #ddd;
     max-width: 100%;
 }
+
+.search-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin: 20px auto;
+    max-width: 450px;
+    width: 100%;
+}
+
+#search-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#search-input:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.search-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 768px) {
+    .search-block {
+        flex-direction: row; /* Горизонтальний вигляд для більших екранів */
+        gap: 15px;
+    }
+
+    #search-input {
+        width: 70%;
+    }
+
+    .search-btn {
+        max-width: 30%; /* Обмеження ширини кнопки */
+    }
+}
+
 
 .dropdown {
     margin-bottom: 10px;
@@ -137,11 +214,11 @@ body {
     font-size: 16px;
     border-radius: 8px;
     transition: background 0.3s, box-shadow 0.3s;
-    background: #4CAF50;
+    background: #007BFF;
 }
 
 .execute-btn:hover {
-    background: #45a049;
+    background: #0056b3;
 }
 
 .result {
@@ -196,14 +273,13 @@ body {
 }
 
 button.active {
-    background-color: #4CAF50;
-    /* Синій колір для акценту */
+    background-color: #007BFF;
     color: white;
     border-radius: 5px;
 }
 
 .toolbar button.active {
-    background-color: #4CAF50;
+    background-color: #007BFF;
     color: white;
 }
 
@@ -315,6 +391,10 @@ td {
         height: auto;
         /* Встановлюємо автоматичну висоту для панелі інструментів */
     }
+}
+
+button, input, select, textarea {
+    font-family: inherit; 
 }
 
 /* 
