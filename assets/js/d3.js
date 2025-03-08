@@ -123,7 +123,7 @@ function editText(event) {
             .append("foreignObject")
             .attr("x", x)
             .attr("y", y)
-            .attr("width", bbox.width * 3)  // Збільшена ширина для кращої видимості
+            .attr("width", bbox.width * 4)  // Збільшена ширина для кращої видимості
             .attr("height", bbox.height * 3)  // Збільшена висота
             .append("xhtml:input")
             .attr("type", "text")
