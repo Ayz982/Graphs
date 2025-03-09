@@ -88,6 +88,115 @@ canvas.on("click", function (event) {
     }
 });
 
+function createVertex(x, y) {
+    const vertexID = vertexCount++;
+    const vertex = canvasGroup.append("circle")
+        .attr("cx", x).attr("cy", y).attr("r", 20)
+        .attr("fill", "black").attr("class", "vertex")
+        .style("cursor", "pointer");
+
+    canvasGroup.append("text")
+        .attr("x", x).attr("y", y)
+        .attr("text-anchor", "middle")
+        .text(vertexID).attr("class", "vertex-label");
+
+    vertices.set(vertexID, [x, y]);
+    graph.addVertex(vertexID);
+}
+
+function getVertexAt(x, y) {
+    for (const [id, [vx, vy]] of vertices.entries()) {
+        if (vx === x && vy === y) {
+            return id;
+        }
+    }
+    return null;
+}
+
+function handleEdgeCreation(vertexID) {
+    if (!selectedVertex) {
+        selectedVertex = vertexID;
+    } else if (selectedVertex !== vertexID) {
+        if (modes.edge) {
+            createEdge(selectedVertex, vertexID);
+        } else if (modes.directedEdge) {
+            createDirectedEdge(selectedVertex, vertexID);
+        }
+        selectedVertex = null;
+    }
+}
+
+function createLoop(vertexID) {
+    const [x, y] = vertices.get(vertexID); // Отримуємо координати вершини
+    const radius = 30; // Радіус петлі
+    const offsetY = 20; // Зміщення петлі вгору на 20 пікселів
+    const offsetX = 25; // Зміщення вправо на 20 пікселів
+    const loopPath = `M ${x - radius + offsetX} ${y - offsetY} 
+                      A ${radius} ${radius} 0 0 1 ${x + radius + offsetX} ${y - offsetY}
+                      A ${radius} ${radius} 0 0 1 ${x + 17} ${y + 10}`;
+
+    // Додаємо саму петлю з класом для стилізації
+    canvasGroup.append("path")
+        .attr("d", loopPath)
+        .attr("class", "edge-loop");
+
+    // Додаємо петлю в граф
+    graph.addEdge(vertexID, vertexID);
+}
+
+
+
+
+function createEdge(v1, v2) {
+    if (!vertices.has(v1) || !vertices.has(v2)) return;
+    const [x1, y1] = vertices.get(v1);
+    const [x2, y2] = vertices.get(v2);
+    const offset = 20;
+    const dx = x2 - x1, dy = y2 - y1;
+    const length = Math.sqrt(dx * dx + dy * dy);
+    const unitX = dx / length, unitY = dy / length;
+    const adjustedX1 = x1 + unitX * offset, adjustedY1 = y1 + unitY * offset;
+    const adjustedX2 = x2 - unitX * offset, adjustedY2 = y2 - unitY * offset;
+
+    canvasGroup.append("line")
+        .attr("x1", adjustedX1).attr("y1", adjustedY1)
+        .attr("x2", adjustedX2).attr("y2", adjustedY2)
+        .attr("stroke", "black").attr("stroke-width", 3).attr("class", "edge");
+
+    // canvasGroup.append("text")
+    //     .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
+    //     .attr("text-anchor", "middle")
+    //     .attr("dominant-baseline", "middle")
+    //     .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
+
+    graph.addEdge(v1, v2);
+}
+
+function createDirectedEdge(v1, v2) {
+    const [x1, y1] = vertices.get(v1);
+    const [x2, y2] = vertices.get(v2);
+    const offset = 20, arrowOffset = 5;
+    const dx = x2 - x1, dy = y2 - y1;
+    const length = Math.sqrt(dx * dx + dy * dy);
+    const unitX = dx / length, unitY = dy / length;
+    const adjustedX1 = x1 + unitX * offset, adjustedY1 = y1 + unitY * offset;
+    const adjustedX2 = x2 - unitX * (offset + arrowOffset), adjustedY2 = y2 - unitY * (offset + arrowOffset);
+
+    canvasGroup.append("defs").append("marker")
+        .attr("id", "arrowhead").attr("viewBox", "0 0 10 10")
+        .attr("refX", 8).attr("refY", 5).attr("markerWidth", 6)
+        .attr("markerHeight", 6).attr("orient", "auto")
+        .append("path").attr("d", "M0,0 L10,5 L0,10 Z").attr("fill", "black");
+
+    canvasGroup.append("line")
+        .attr("x1", adjustedX1).attr("y1", adjustedY1)
+        .attr("x2", adjustedX2).attr("y2", adjustedY2)
+        .attr("stroke", "black").attr("stroke-width", 3).attr("class", "edge")
+        .attr("marker-end", "url(#arrowhead)");
+
+    graph.addEdge(v1, v2);
+}
+
 function editText(event) {
     const [mouseX, mouseY] = d3.pointer(event, canvas.node());
     const x = mouseX / scale;
@@ -172,146 +281,6 @@ function createText(x, y) {
             .text(newText);
     }
 }
-
-function createVertex(x, y) {
-    const vertexID = vertexCount++;
-    const vertex = canvasGroup.append("circle")
-        .attr("cx", x).attr("cy", y).attr("r", 20)
-        .attr("fill", "black").attr("class", "vertex")
-        .style("cursor", "pointer");
-
-    canvasGroup.append("text")
-        .attr("x", x).attr("y", y)
-        .attr("text-anchor", "middle")
-        .text(vertexID).attr("class", "vertex-label");
-
-    vertices.set(vertexID, [x, y]);
-    graph.addVertex(vertexID);
-}
-
-function getVertexAt(x, y) {
-    for (const [id, [vx, vy]] of vertices.entries()) {
-        if (vx === x && vy === y) {
-            return id;
-        }
-    }
-    return null;
-}
-
-function handleEdgeCreation(vertexID) {
-    if (!selectedVertex) {
-        selectedVertex = vertexID;
-    } else if (selectedVertex !== vertexID) {
-        if (modes.edge) {
-            createEdge(selectedVertex, vertexID);
-        } else if (modes.directedEdge) {
-            createDirectedEdge(selectedVertex, vertexID);
-        }
-        selectedVertex = null;
-    }
-}
-function handleEdgeCreation(vertexID) {
-    if (!selectedVertex) {
-        selectedVertex = vertexID;
-    } else if (selectedVertex !== vertexID) {
-        if (modes.edge) {
-            createEdge(selectedVertex, vertexID);
-        } else if (modes.directedEdge) {
-            createDirectedEdge(selectedVertex, vertexID);
-        }
-        selectedVertex = null;
-    }
-}
-
-function createLoop(vertexID) {
-    const [x, y] = vertices.get(vertexID); // Отримуємо координати вершини
-    const radius = 30; // Радіус петлі
-    const offsetY = 20; // Зміщення петлі вгору на 20 пікселів
-    const offsetX = 25; // Зміщення вправо на 20 пікселів
-
-    // Створюємо патерн для малювання петлі
-    // Перша дуга (верхня частина) з 0 до 180 градусів
-    // Друга дуга (нижня права частина) з 180 до 360 градусів
-    const loopPath = `M ${x - radius + offsetX} ${y - offsetY} 
-                      A ${radius} ${radius} 0 0 1 ${x + radius + offsetX} ${y - offsetY}
-                      A ${radius} ${radius} 0 0 1 ${x + 17} ${y + 10}`;
-
-    // Додаємо саму петлю з класом для стилізації
-    canvasGroup.append("path")
-        .attr("d", loopPath)
-        .attr("class", "edge-loop");
-
-    // // Додаємо текст з індикацією петлі, зміщений вгору
-    // canvasGroup.append("text")
-    //     .attr("x", x + offsetX) // Зміщуємо текст вправо
-    //     .attr("y", y - radius - offsetY - 10)  // Зміщуємо текст вгору
-    //     .attr("text-anchor", "middle")
-    //     .text(String.fromCharCode(96 + edgeCount++))
-    //     .attr("class", "edge-label");
-
-    // Додаємо петлю в граф
-    graph.addEdge(vertexID, vertexID);
-}
-
-
-
-
-function createEdge(v1, v2) {
-    if (!vertices.has(v1) || !vertices.has(v2)) return;
-    const [x1, y1] = vertices.get(v1);
-    const [x2, y2] = vertices.get(v2);
-    const offset = 20;
-    const dx = x2 - x1, dy = y2 - y1;
-    const length = Math.sqrt(dx * dx + dy * dy);
-    const unitX = dx / length, unitY = dy / length;
-    const adjustedX1 = x1 + unitX * offset, adjustedY1 = y1 + unitY * offset;
-    const adjustedX2 = x2 - unitX * offset, adjustedY2 = y2 - unitY * offset;
-
-    canvasGroup.append("line")
-        .attr("x1", adjustedX1).attr("y1", adjustedY1)
-        .attr("x2", adjustedX2).attr("y2", adjustedY2)
-        .attr("stroke", "black").attr("stroke-width", 3).attr("class", "edge");
-
-    // canvasGroup.append("text")
-    //     .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
-    //     .attr("text-anchor", "middle")
-    //     .attr("dominant-baseline", "middle")
-    //     .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
-
-    graph.addEdge(v1, v2);
-}
-
-function createDirectedEdge(v1, v2) {
-    const [x1, y1] = vertices.get(v1);
-    const [x2, y2] = vertices.get(v2);
-    const offset = 20, arrowOffset = 5;
-    const dx = x2 - x1, dy = y2 - y1;
-    const length = Math.sqrt(dx * dx + dy * dy);
-    const unitX = dx / length, unitY = dy / length;
-    const adjustedX1 = x1 + unitX * offset, adjustedY1 = y1 + unitY * offset;
-    const adjustedX2 = x2 - unitX * (offset + arrowOffset), adjustedY2 = y2 - unitY * (offset + arrowOffset);
-
-    canvasGroup.append("defs").append("marker")
-        .attr("id", "arrowhead").attr("viewBox", "0 0 10 10")
-        .attr("refX", 8).attr("refY", 5).attr("markerWidth", 6)
-        .attr("markerHeight", 6).attr("orient", "auto")
-        .append("path").attr("d", "M0,0 L10,5 L0,10 Z").attr("fill", "black");
-
-    canvasGroup.append("line")
-        .attr("x1", adjustedX1).attr("y1", adjustedY1)
-        .attr("x2", adjustedX2).attr("y2", adjustedY2)
-        .attr("stroke", "black").attr("stroke-width", 3).attr("class", "edge")
-        .attr("marker-end", "url(#arrowhead)");
-
-    // canvasGroup.append("text")
-    //     .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
-    //     .attr("text-anchor", "middle")
-    //     .attr("dominant-baseline", "middle")
-    //     .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
-
-    graph.addEdge(v1, v2);
-}
-
 
 // Функція для виконання операцій за запитом
 function executeFunction(functionName) {
