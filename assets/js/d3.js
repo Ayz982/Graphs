@@ -92,80 +92,68 @@ function editText(event) {
     const [mouseX, mouseY] = d3.pointer(event, canvas.node());
     const x = mouseX / scale;
     const y = mouseY / scale;
-
-    // Знаходимо найближчий текстовий елемент до точки кліку
-    const clickedText = canvasGroup.selectAll(".text-element")
+    
+    const clickedText = canvasGroup.selectAll(".text-element, .vertex-label")
         .filter(function () {
-            const bbox = this.getBBox(); // Отримуємо межі елемента
-            return (
-                x >= bbox.x &&
-                x <= bbox.x + bbox.width &&
-                y >= bbox.y &&
-                y <= bbox.y + bbox.height
-            );
+            const bbox = this.getBBox();
+            return (x >= bbox.x && x <= bbox.x + bbox.width && y >= bbox.y && y <= bbox.y + bbox.height);
         });
-
+    
     if (!clickedText.empty()) {
-        // Перевірка, чи вже є відкритий інпут для редагування
         const existingInput = d3.select(canvas.node()).select("foreignObject");
         if (!existingInput.empty()) {
-            existingInput.remove(); // Видаляємо попередній інпут перед створенням нового
+            existingInput.remove();
         }
-
+    
         const currentText = clickedText.text();
         const textElement = clickedText.node();
-
-        // Отримуємо розмір тексту
-        const bbox = textElement.getBBox(); // Отримуємо bbox після того, як знайдено елемент
-
-        // Створюємо елемент введення для редагування
+        const bbox = textElement.getBBox();
+    
+        const minWidth = 50;
+        const maxWidth = 300;
+        const defaultWidth = Math.max(minWidth, Math.min(bbox.width * 1.5, maxWidth));
+    
         const inputBox = d3.select(canvas.node())
             .append("foreignObject")
-            .attr("x", x)
-            .attr("y", y)
-            .attr("width", bbox.width * 4)  // Збільшена ширина для кращої видимості
-            .attr("height", bbox.height * 3)  // Збільшена висота
+            .attr("x", bbox.x)
+            .attr("y", bbox.y - 5)
+            .attr("width", defaultWidth)
+            .attr("height", bbox.height * 3)
             .append("xhtml:input")
             .attr("type", "text")
             .attr("value", currentText)
             .style("width", "100%")
             .style("height", "100%")
-            .style("font-size", "18px")  // Збільшено шрифт для зручності
-            .style("border", "2px solid #4CAF50") // Зелену рамку для виділення
-            .style("padding", "10px")  // Збільшені відступи
-            .style("background-color", "#f9f9f9") // Легкий фон
-            .style("border-radius", "5px") // Заокруглені кути
-            .style("box-sizing", "border-box") // Щоб враховувати відступи
-            .style("outline", "none"); // Заборона на обведення при фокусі
-
-        // Автоматичне виділення тексту
+            .style("font-size", "18px")
+            .style("border", "2px solid #007BFF")
+            .style("padding", "5px")
+            .style("background-color", "#f9f9f9")
+            .style("border-radius", "5px")
+            .style("box-sizing", "border-box")
+            .style("outline", "none");
+    
         inputBox.node().select();
-        
-        // Обробник для зміни розміру поля введення
+    
         inputBox.on("input", function () {
-            const inputWidth = this.scrollWidth; // Отримуємо ширину тексту
-            const inputHeight = this.scrollHeight; // Отримуємо висоту тексту
-            d3.select(this.parentNode)
-                .attr("width", inputWidth + 20) // Додаємо відступи
+            const inputWidth = Math.max(minWidth, Math.min(this.scrollWidth + 20, maxWidth));
+            d3.select(this.parentNode).attr("width", inputWidth);
         });
-
-        // Обробник для завершення редагування
+    
         inputBox.on("blur", function () {
             const newText = this.value.trim();
             if (newText !== "") {
-                clickedText.text(newText); // Оновлюємо текст
+                clickedText.text(newText);
             }
-            inputBox.remove(); // Видаляємо поле редагування
+            inputBox.remove();
         });
-
-        // Обробник для натискання Enter
+    
         inputBox.on("keydown", function (e) {
             if (e.key === "Enter") {
                 const newText = this.value.trim();
                 if (newText !== "") {
-                    clickedText.text(newText); // Оновлюємо текст
+                    clickedText.text(newText);
                 }
-                inputBox.remove(); // Видаляємо поле редагування
+                inputBox.remove();
             }
         });
     }
