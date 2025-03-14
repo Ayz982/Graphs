@@ -4,18 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graphly - Головна сторінка</title>
+    <title>Graphly - Лекція 1</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/nav.css">
+    <link rel="stylesheet" href="../../assets/css/nav.css">
+    <link rel="stylesheet" href="../../assets/css/lecture.css">
 </head>
 
 <body>
     <header class="header">
         <nav class="nav container">
             <div class="nav__data">
-                <a href="index.html" class="nav__logo">
+                <a href="../../index.html" class="nav__logo">
                     <i class="ri-organization-chart"></i> Graphly
                 </a>
                 <div class="nav__toggle" id="nav-toggle">
@@ -27,7 +28,7 @@
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <!-- Main Section Link -->
-                    <li><a href="index.html" class="nav__link">Головна</a></li>
+                    <li><a href="../../index.html" class="nav__link">Головна</a></li>
     
                     <!-- Materials Dropdown -->
                     <li class="dropdown__item">
@@ -35,9 +36,9 @@
                             Матеріали<i class="ri-arrow-down-s-line dropdown__arrow"></i>
                         </div>
                         <ul class="dropdown__menu">
-                            <li><a href="src/lectures.html" class="dropdown__link"><i class="ri-book-open-line"></i> Лекції</a></li>
-                            <li><a href="src/practical_work.html" class="dropdown__link"><i class="ri-file-list-3-line"></i> Практичні роботи</a></li>
-                            <li><a href="src/assignments.html" class="dropdown__link"><i class="ri-file-code-line"></i> Завдання</a></li>
+                            <li><a href="../lectures.html" class="dropdown__link"><i class="ri-book-open-line"></i> Лекції</a></li>
+                            <li><a href="../practical_work.html" class="dropdown__link"><i class="ri-file-list-3-line"></i> Практичні роботи</a></li>
+                            <li><a href="../assignments.html" class="dropdown__link"><i class="ri-file-code-line"></i> Завдання</a></li>
                         </ul>
                     </li>
     
@@ -47,10 +48,10 @@
                             Інструменти <i class="ri-arrow-down-s-line dropdown__arrow"></i>
                         </div>
                         <ul class="dropdown__menu">
-                            <li><a href="src/graph_editor.html" class="dropdown__link"><i class="ri-pencil-ruler-line"></i> Редактор графів</a></li>
-                            <li><a href="src/algorithms.html" class="dropdown__link"><i class="ri-search-line"></i> Алгоритми</a></li>
-                            <li><a href="src/graph_visualization.html" class="dropdown__link"><i class="ri-eye-line"></i> Візуалізація графів</a></li>
-                            <li><a href="src/graph_analysis.html" class="dropdown__link"><i class="ri-bar-chart-box-line"></i> Аналіз графів</a></li>
+                            <li><a href="../graph_editor.html" class="dropdown__link"><i class="ri-pencil-ruler-line"></i> Редактор графів</a></li>
+                            <li><a href="../algorithms.html" class="dropdown__link"><i class="ri-search-line"></i> Алгоритми</a></li>
+                            <li><a href="../graph_visualization.html" class="dropdown__link"><i class="ri-eye-line"></i> Візуалізація графів</a></li>
+                            <li><a href="../graph_analysis.html" class="dropdown__link"><i class="ri-bar-chart-box-line"></i> Аналіз графів</a></li>
                         </ul>
                     </li>
     
@@ -60,32 +61,17 @@
                             Тестування знань <i class="ri-arrow-down-s-line dropdown__arrow"></i>
                         </div>
                         <ul class="dropdown__menu">
-                            <li><a href="src/quiz.html" class="dropdown__link"><i class="ri-question-line"></i> Перевірка знань</a></li>
-                            <li><a href="src/assessment.html" class="dropdown__link"><i class="ri-award-line"></i> Оцінювання</a></li>
+                            <li><a href="../quiz.html" class="dropdown__link"><i class="ri-question-line"></i> Перевірка знань</a></li>
+                            <li><a href="../assessment.html" class="dropdown__link"><i class="ri-award-line"></i> Оцінювання</a></li>
                         </ul>
                     </li>
     
                     <!-- Support Section Link -->
-                    <li><a href="src/support.html" class="nav__link">Підтримка</a></li>
+                    <li><a href="../support.html" class="nav__link">Підтримка</a></li>
                 </ul>
             </div>
         </nav>
     </header>
-    
-    <main>
-        <section class="intro">
-          <div class="intro__text">
-            <h1>Ласкаво просимо на сайт!</h1>
-            <p>Наш ресурс допоможе вам легко та швидко створювати, редагувати та аналізувати графи для будь-яких ваших проєктів. Використовуйте інтуїтивний редактор графів, щоб візуалізувати структури, моделювати алгоритми або досліджувати нові можливості.</p>
-            <p>Перейдіть до редактора графів та починайте працювати вже зараз!</p>
-            <a href="src/graph_editor.html" class="btn">Відкрити редактор графів</a>
-          </div>
-          <div class="intro__image">
-            <img src="assets/image/Graph Editor.png" alt="Візуалізація графа у редакторі" />
-          </div>
-        </section>
-      </main>
-      
 
     <footer class="footer">
         <div class="footer__content">
@@ -95,7 +81,7 @@
         </div>
     </footer>
     <!--=============== MAIN JS ===============-->
-    <script src="assets/js/main.js" defer></script>
+    <script src="../../assets/js/main.js" defer></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </body>
