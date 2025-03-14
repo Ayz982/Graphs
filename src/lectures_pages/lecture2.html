@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphly - Лекція 1</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/nav.css">
+    <link rel="stylesheet" href="../../assets/css/lecture_content.css">
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <div class="nav__data">
+                <a href="../../index.html" class="nav__logo">
+                    <i class="ri-organization-chart"></i> Graphly
+                </a>
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class="ri-menu-line nav__burger"></i>
+                    <i class="ri-close-line nav__close"></i>
+                </div>
+            </div>
+            <!--=============== NAV MENU ===============-->
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <!-- Main Section Link -->
+                    <li><a href="../../index.html" class="nav__link">Головна</a></li>
+
+                    <!-- Materials Dropdown -->
+                    <li class="dropdown__item">
+                        <div class="nav__link">
+                            Матеріали<i class="ri-arrow-down-s-line dropdown__arrow"></i>
+                        </div>
+                        <ul class="dropdown__menu">
+                            <li><a href="../lectures.html" class="dropdown__link"><i class="ri-book-open-line"></i>
+                                    Лекції</a></li>
+                            <li><a href="../practical_work.html" class="dropdown__link"><i
+                                        class="ri-file-list-3-line"></i> Практичні роботи</a></li>
+                            <li><a href="../assignments.html" class="dropdown__link"><i class="ri-file-code-line"></i>
+                                    Завдання</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Tools Dropdown -->
+                    <li class="dropdown__item">
+                        <div class="nav__link">
+                            Інструменти <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+                        </div>
+                        <ul class="dropdown__menu">
+                            <li><a href="../graph_editor.html" class="dropdown__link"><i
+                                        class="ri-pencil-ruler-line"></i> Редактор графів</a></li>
+                            <li><a href="../algorithms.html" class="dropdown__link"><i class="ri-search-line"></i>
+                                    Алгоритми</a></li>
+                            <li><a href="../graph_visualization.html" class="dropdown__link"><i class="ri-eye-line"></i>
+                                    Візуалізація графів</a></li>
+                            <li><a href="../graph_analysis.html" class="dropdown__link"><i
+                                        class="ri-bar-chart-box-line"></i> Аналіз графів</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Knowledge Testing Dropdown -->
+                    <li class="dropdown__item">
+                        <div class="nav__link">
+                            Тестування знань <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+                        </div>
+                        <ul class="dropdown__menu">
+                            <li><a href="../quiz.html" class="dropdown__link"><i class="ri-question-line"></i> Перевірка
+                                    знань</a></li>
+                            <li><a href="../assessment.html" class="dropdown__link"><i class="ri-award-line"></i>
+                                    Оцінювання</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Support Section Link -->
+                    <li><a href="../support.html" class="nav__link">Підтримка</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="lecture-container">
+        <div class="lecture-content">
+            <h1 class="lecture-title">Лекція 2. <br> </h1>
+
+            <!-- Розділ лекції -->
+            <!-- <div class="lecture-section">
+                <h2 class="section-title">1.1 Основні поняття</h2>
+            </div> -->
+
+            <!-- Основний текст лекції -->
+            <!-- <div class="lecture-text">
+                <p>Теорія графів у математиці займається вивченням особливого виду математичних структур - графів,
+                    що використовуються для моделювання парних відношень між об'єктами.
+                    Графи у цьому контексті складаються з вершин (точок), які з'єднані ребрами (лініями).</p>
+            </div> -->
+
+            <!-- Визначення та позначення -->
+            <!-- <div class="lecture-block definition">
+                <div class="block-title">Визначення: граф</div>
+                <p>Граф – це абстрактний комбінаторний об’єкт, що складається з двох множин V (vertex ) –
+                    множина вершин і Е (edge) – множина ребер</p>
+            </div> -->
+
+            <!-- Приклад -->
+            <!-- <div class="lecture-block example">
+                <div class="block-title">Приклад 1.1 </div>
+                <p>Задача про Кенігсбергські мости.</p>
+                <p><br>Ейлер, живучи в Кенігсберзі любив прогулюватися понад річкою і
+                    через мости. І от в нього виникало запитання чи існує такий шлях, щоб вийти з
+                    дому, обійти всі мости і повернутися додому але обійти мости так, щоб кожен міст
+                    пройти рівно один раз. Ейлер сам цю задачу сформулював і сам її розв’язав тим
+                    самим поклавши початок використанню графів у математиці. Більш того у цьому
+                    разі суша – це вершини графа, мости – ребра. Тоді схема мостів у задачі Ейлера
+                    приводить нас до графа, що показаний на рисунку 1.</p>
+                <div class="image-container">
+                    <img src="../../assets/image/png_11klas_2020_2021_Modul_01_0 - Copy 6.png"
+                        alt="Граф мости Кенігсберга">
+                    <p class="image-caption">Рисунок 1. Граф Кенігсбергських мостів</p>
+                </div>
+            </div> -->
+
+            <!-- Тестові питання -->
+            <!-- <div class="lecture-block test-question-block" id="test-block-1">
+                <div class="block-title">Тестові питання</div>
+                <form id="test-questions-form-1">
+                    <div id="test-questions-container-1"></div>
+                    <button type="submit" class="submit-btn">Перевірити відповіді</button>
+                </form>
+                <div id="result-1"></div>
+            </div> -->
+            <!-- Розділ лекції -->
+            <!-- <div class="lecture-section">
+                <h2 class="section-title">1.1 Основні поняття</h2>
+            </div> -->
+
+            <!-- Основний текст лекції -->
+            <!-- <div class="lecture-text">
+                <p>Теорія графів у математиці займається вивченням особливого виду математичних структур - графів,
+                    що використовуються для моделювання парних відношень між об'єктами.
+                    Графи у цьому контексті складаються з вершин (точок), які з'єднані ребрами (лініями).</p>
+            </div> -->
+
+            <!-- Визначення та позначення -->
+            <!-- <div class="lecture-block definition">
+                <div class="block-title">Визначення: граф</div>
+                <p>Граф – це абстрактний комбінаторний об’єкт, що складається з двох множин V (vertex ) –
+                    множина вершин і Е (edge) – множина ребер</p>
+            </div> -->
+
+            <!-- Приклад -->
+            <!-- <div class="lecture-block example">
+                <div class="block-title">Приклад 1.1 </div>
+                <p>Задача про Кенігсбергські мости.</p>
+                <p><br>Ейлер, живучи в Кенігсберзі любив прогулюватися понад річкою і
+                    через мости. І от в нього виникало запитання чи існує такий шлях, щоб вийти з
+                    дому, обійти всі мости і повернутися додому але обійти мости так, щоб кожен міст
+                    пройти рівно один раз. Ейлер сам цю задачу сформулював і сам її розв’язав тим
+                    самим поклавши початок використанню графів у математиці. Більш того у цьому
+                    разі суша – це вершини графа, мости – ребра. Тоді схема мостів у задачі Ейлера
+                    приводить нас до графа, що показаний на рисунку 1.</p>
+                <div class="image-container">
+                    <img src="../../assets/image/png_11klas_2020_2021_Modul_01_0 - Copy 6.png"
+                        alt="Граф мости Кенігсберга">
+                    <p class="image-caption">Рисунок 1. Граф Кенігсбергських мостів</p>
+                </div>
+            </div>
+            <div class="lecture-block test-question-block" id="test-block-2">
+                <div class="block-title">Тестові питання</div>
+                <form id="test-questions-form-2">
+                    <div id="test-questions-container-2"></div>
+                    <button type="submit" class="submit-btn">Перевірити відповіді</button>
+                </form>
+                <div id="result-2"></div>
+            </div> -->
+            <!-- Розділ лекції -->
+            <!-- <div class="lecture-section">
+                <h2 class="section-title">1.1 Основні поняття</h2>
+            </div> -->
+
+            <!-- Основний текст лекції -->
+            <!-- <div class="lecture-text">
+                <p>Теорія графів у математиці займається вивченням особливого виду математичних структур - графів,
+                    що використовуються для моделювання парних відношень між об'єктами.
+                    Графи у цьому контексті складаються з вершин (точок), які з'єднані ребрами (лініями).</p>
+            </div> -->
+
+            <!-- Визначення та позначення -->
+            <!-- <div class="lecture-block definition">
+                <div class="block-title">Визначення: граф</div>
+                <p>Граф – це абстрактний комбінаторний об’єкт, що складається з двох множин V (vertex ) –
+                    множина вершин і Е (edge) – множина ребер</p>
+            </div> -->
+
+            <!-- Приклад -->
+            <!-- <div class="lecture-block example">
+                <div class="block-title">Приклад 1.1 </div>
+                <p>Задача про Кенігсбергські мости.</p>
+                <p><br>Ейлер, живучи в Кенігсберзі любив прогулюватися понад річкою і
+                    через мости. І от в нього виникало запитання чи існує такий шлях, щоб вийти з
+                    дому, обійти всі мости і повернутися додому але обійти мости так, щоб кожен міст
+                    пройти рівно один раз. Ейлер сам цю задачу сформулював і сам її розв’язав тим
+                    самим поклавши початок використанню графів у математиці. Більш того у цьому
+                    разі суша – це вершини графа, мости – ребра. Тоді схема мостів у задачі Ейлера
+                    приводить нас до графа, що показаний на рисунку 1.</p>
+                <div class="image-container">
+                    <img src="../../assets/image/png_11klas_2020_2021_Modul_01_0 - Copy 6.png"
+                        alt="Граф мости Кенігсберга">
+                    <p class="image-caption">Рисунок 1. Граф Кенігсбергських мостів</p>
+                </div>
+            </div>
+            <div class="lecture-block test-question-block" id="test-block-3">
+                <div class="block-title">Тестові питання</div>
+                <form id="test-questions-form-3">
+                    <div id="test-questions-container-3"></div>
+                    <button type="submit" class="submit-btn">Перевірити відповіді</button>
+                </form>
+                <div id="result-3"></div>
+            </div> -->
+
+            <!-- Запитання -->
+            <!-- <div class="lecture-block question-block">
+                <div class="block-title">Питання для перевірки</div>
+                <ul class="questions-list">
+                    <li>Що таке граф у теорії графів?</li>
+                    <li>Яка різниця між орієнтованими та неорієнтованими графами?</li>
+                    <li>Як можна задати граф за допомогою матриці суміжності?</li>
+                </ul>
+            </div> -->
+            <div class="lecture-navigation">
+                <button class="nav-btn prev-lecture" onclick="location.href='lecture1.html'">Попередня лекція</button>
+                <button class="nav-btn download-lecture" onclick="location.href='download-lecture-link.pdf'">Завантажити лекцію</button>
+                <button class="nav-btn test-lecture" onclick="location.href='test-lecture-link.html'">Пройти тестування</button>
+                <button class="nav-btn next-lecture" onclick="location.href='lecture1.html'">Наступна лекція</button>
+            </div>            
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__content">
+            <p class="footer__text">© 2025 | Розроблено для проєкту
+                <a href="https://ayz982.github.io/Graphs/" target="_blank" class="footer__link">Редактор графів</a>
+            </p>
+        </div>
+    </footer>
+    <!--=============== MAIN JS ===============-->
+    <script src="../../assets/js/main.js" defer></script>
+    <script src="../../assets/js/test_lecture.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        // loadQuestionsFromFile('test_json/test1.json', 'test-questions-container-1', 'test-questions-form-1', 'result-1');
+        // loadQuestionsFromFile('test_json/test2.json', 'test-questions-container-2', 'test-questions-form-2', 'result-2');
+        // loadQuestionsFromFile('test_json/test3.json', 'test-questions-container-3', 'test-questions-form-3', 'result-3');
+
+    </script>
+</body>
+
+</html>

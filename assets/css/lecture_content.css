@@ -1,0 +1,447 @@
+/* ======== Відповідно до ваших змінних ======== */
+:root {
+    --color-green-400: #2d6a32;
+    --color-green-500: #1b4d26;
+    --color-red-400: #f8d7da;  /* Світло-червоний фон для питання */
+    --color-red-500: #721c24;  /* Темно-червоний фон і текст */
+    --color-blue-200: #e0f0ff;
+    --color-blue-400: #2d5e9e;
+    --color-orange-400: #ffecb3;  
+    --color-orange-500: #ff9800;
+    --color-orange-600: #df7700;
+    --font-semi-bold: 600;
+}
+
+/* ======== Лекційний контейнер ======== */
+.lecture-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.lecture-content {
+    width: 100%;
+    max-width: 70vw;
+    margin: calc(var(--header-height) + 3rem) auto;
+    padding: 2rem 5%;
+    background: var(--color-white-100);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* ======== Основний заголовок лекції ======== */
+.lecture-title {
+    font-size: 2.5rem;
+    font-weight: var(--font-semi-bold);
+    color: var(--color-black-200);
+    margin-bottom: 2rem;
+}
+
+/* ======== Основний текст лекції ======== */
+.lecture-text p {
+    font-size: 1.1rem;
+    color: var(--color-black-300);
+    margin-bottom: 1.5rem;
+}
+
+/* ======== Стиль для блоків визначень та позначень ======== */
+.lecture-block {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    position: relative;
+}
+
+/* ======== Визначення ======== */
+.definition {
+    background-color: #e6f9e0; /* Світло-зелений фон */
+    border-left: 5px solid var(--color-green-500); /* Темно-зелена ліва межа */
+    padding-top: 2rem; /* Додаємо відступ зверху, щоб текст не заходив під заголовок */
+}
+
+.definition .block-title {
+    font-weight: bold;
+    color: #ffffff; /* Білий текст */
+    background-color: var(--color-green-500); /* Темно-зелений фон */
+    padding: 0.3rem 1rem;
+    position: absolute;
+    top: -0.5rem;
+    left: -5px; /* Зміщує блок, щоб злився з лівою межею */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкий тіньовий ефект */
+}
+
+/* ======== Приклад ======== */
+.example {
+    background-color: var(--color-blue-200); /* Світло-синій фон */
+    border-left: 5px solid var(--color-blue-400); /* Темно-синя ліва межа */
+    padding-top: 2rem; /* Відступ для прикладів */
+}
+
+.example .block-title {
+    font-weight: bold;
+    color: #ffffff; /* Білий текст */
+    background-color: var(--color-blue-400); /* Темно-синій фон */
+    padding: 0.3rem 1rem;
+    position: absolute;
+    top: -0.5rem;
+    left: -5px; /* Зміщує блок, щоб злився з лівою межею */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкий тіньовий ефект */
+}
+/* Стилі для блоку з рисунком */
+.image-container {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.image-container img {
+    max-width: 100%; /* Змінює розмір малюнка під ширину контейнера */
+    height: auto;
+    border-radius: 8px;
+}
+
+.image-caption {
+    font-size: 0.9rem;
+    color: var(--color-black-300); /* Колір для підпису */
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* ======== Блок з питаннями ======== */
+.question-block {
+    background-color: var(--color-red-400); /* Світло-червоний фон */
+    border-left: 5px solid var(--color-red-500);; /* Темно-червона ліва межа */
+}
+
+.question-block .block-title {
+    font-weight: bold;
+    color: #ffffff; /* Білий текст */
+    background-color: var(--color-red-500); /* Темно-червоний фон */
+    padding: 0.3rem 1rem;
+    position: absolute;
+    top: -0.5rem;
+    left: -5px; /* Зміщує блок, щоб злився з лівою межею */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* ======== Список питань ======== */
+.questions-list {
+    margin-top: 2rem;
+    font-size: 1rem;
+    color: var(--color-red-500);; /* Темно-червоний текст */
+}
+
+.questions-list li {
+    margin-bottom: 1rem;
+}
+/* ======== Стилі для тестових питань ======== */
+.test-question-block {
+    background-color: var(--color-orange-400); /* Світло-оранжевий фон */
+    border-left: 5px solid var(--color-orange-500); /* Темно-оранжева ліва межа */
+    border-radius: 10px;
+    padding: 2rem; /* Збільшено відступ для комфортнішого вигляду */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легке тінювання для глибини */
+    margin-bottom: 2rem; /* Відступ між блоками */
+}
+
+.test-question-block .block-title {
+    font-weight: bold;
+    color: var(--color-white-100); /* Білий текст */
+    background-color: var(--color-orange-500); /* Темно-оранжевий фон */
+    padding: 0.5rem 1.2rem;
+    position: absolute;
+    top: -0.8rem;
+    left: -6px; /* Зміщує блок, щоб злився з лівою межею */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-size: 1rem;
+}
+
+/* Стиль для тестових питань */
+.test-question {
+    margin-top: 2rem; /* Збільшено відступ між заголовком блоку і питанням */
+    margin-bottom: 2rem;
+}
+
+.test-question p {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--color-black-500); /* Темний текст */
+    line-height: 1.4;
+}
+
+/* Стилі для варіантів відповідей */
+.options {
+    margin-top: 1rem;
+}
+
+.options label {
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 0.7rem;
+    padding-left: 2.5rem; /* Збільшено відступ для кращої видимості */
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Стилізація кружечка для вибору */
+.options input[type="radio"] {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid var(--color-orange-500); /* Оранжева межа */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+}
+
+/* Стан при виборі */
+.options input[type="radio"]:checked {
+    background-color: var(--color-orange-500);
+    border-color: var(--color-orange-600);
+}
+
+/* Стан при наведенні на варіанти */
+.options label:hover {
+    background-color: #f4f4f4;
+    color: var(--color-orange-500);
+    border-radius: 5px;
+}
+
+.options input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: var(--color-green-500); /* Зелений для вибраного варіанту */
+}
+
+/* Стиль кнопки для перевірки */
+.submit-btn {
+    background-color: var(--color-orange-400);
+    color: white;
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: var(--color-orange-500);
+}
+
+/* Стиль для результатів */
+#result {
+    margin-top: 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--color-black-400);
+    padding: 0.7rem;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Легке тінювання */
+}
+
+/* Стан кнопки, коли вона темнішає після вибору */
+.submit-btn.active {
+    background-color: var(--color-orange-500);
+    transform: scale(1.05); /* Легке збільшення кнопки для акценту */
+}
+
+/* ======== Стилі для блоку назви розділу лекції ======== */
+.lecture-section {
+    background-color: var(--color-white); /* Білий фон для блоку */
+    border-left: 5px solid var(--color-blue-500); /* Ліва темно-оранжева межа */
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--color-black-200); /* Темно-сірий текст для заголовка */
+}
+/* ======== Стилі для контейнера кнопок ======== */
+.lecture-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    gap: 1rem; /* Відстань між кнопками */
+}
+
+.nav-btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: var(--color-blue-500);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.nav-btn:hover {
+    background-color: var(--color-blue-600);
+}
+
+.nav-btn:focus {
+    outline: none;
+    border: 2px solid var(--color-blue-600);
+}
+
+/* Стилі для кнопки "Завантажити лекцію" */
+.download-lecture {
+    background-color: var(--color-green-400);
+}
+
+.download-lecture:hover {
+    background-color: var(--color-green-500);
+}
+
+/* Стилі для кнопки "Пройти тестування" */
+.test-lecture {
+    background-color: var(--color-orange-500);
+}
+
+.test-lecture:hover {
+    background-color: var(--color-orange-600);
+}
+
+/* Адаптивні стилі */
+@media (max-width: 768px) {
+    .lecture-navigation {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .nav-btn {
+        width: 100%;
+    }
+}
+
+/* Адаптивні стилі */
+@media (max-width: 768px) {
+    .lecture-container {
+        padding: 0;
+    }
+    .lecture-content {
+        width: 90%;
+        max-width: 100vh;
+        margin: calc(var(--header-height) + 1.5rem) auto 2rem; 
+        padding: 1.5rem 3%;
+    }
+
+    .lecture-block.example {
+        padding: 1rem;
+    }
+
+    .block-title {
+        font-size: 1.1rem;
+    }
+
+    .image-caption {
+        font-size: 0.85rem;
+    }
+
+    /* Адаптація для блоків визначень та прикладів */
+    .definition,
+    .example {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .definition .block-title,
+    .example .block-title {
+        font-size: 1.2rem;
+        padding: 0.3rem 1rem;
+    }
+
+    .lecture-block p{
+        margin-top: 1rem;
+    }
+
+    .definition,
+    .example {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    /* Стилі для блоку з питаннями */
+    .question-block {
+        padding: 1rem;
+    }
+
+    .questions-list {
+        font-size: 0.9rem;
+    }
+
+    .test-question-block {
+        padding: 1.5rem;
+    }
+
+    /* Стилізація тестових питань та варіантів відповідей */
+    .test-question p {
+        font-size: 0.9rem;
+    }
+
+    .options label {
+        font-size: 0.9rem;
+        padding-left: 2rem;
+    }
+
+    .options input[type="radio"] {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Кнопка для перевірки */
+    .submit-btn {
+        padding: 0.8rem 2rem;
+        font-size: 0.9rem;
+    }
+
+    /* Результати */
+    #result {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+
+    /* Стиль для блоку назви розділу лекції */
+    .lecture-section {
+        padding: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+    }
+
+    /* Для зменшення відступів у мобільному вигляді */
+    .lecture-title {
+        font-size: 2rem;
+    }
+
+    .lecture-text p {
+        font-size: 1rem;
+    }
+}
