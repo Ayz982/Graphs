@@ -25,6 +25,9 @@
             <button title="Петля" onclick="toggleLoopMode(this)">
                 <i class="fas fa-undo"></i>
             </button>
+            <button title="Зважений граф" onclick="toggleWeightedGraphMode(this)">
+                <i class="fas fa-balance-scale"></i>
+            </button>            
             <button title="Створити текст" onclick="toggleCreateTextMode(this)">
                 <i class="fas fa-font"></i>
             </button>
@@ -49,7 +52,7 @@
             <button title="Зменшити" onclick="zoomOut()">
                 <i class="fas fa-search-minus"></i>
             </button>
-            <button title="Формат xlsx" onclick="importFromXLSX(this)">Імпорт з таблиці</button>
+            <button title="Формат xlsx" onclick="importFromXLSX(this)">Імпорт з таблиці</button>          
             <select id="graphType" onchange="updateToolbar()">
                 <option value="undirected">Неорієнтований</option>
                 <option value="directed">Орієнтований</option>
@@ -206,6 +209,18 @@
                 <div class="result" id="undirected-cyclomatic-number-result"></div>
             </div>
         </div>
+        <div class="dropdown" id="undirected-dropdown-dijkstra">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Алгоритм Дейкстри
+            </button>
+            <div class="dropdown-content">
+                <p>Обчислення найкоротших шляхів за алгоритмом Дейкстри.</p>
+                <input type="number" id="undirected-start-node-input" placeholder="Введіть початковий вузол" min="1">
+                <input type="number" id="undirected-end-node-input" placeholder="Введіть кінцевий вузол" min="1">
+                <button class="execute-btn" onclick="executeFunction('undirected-dijkstra')">Виконати</button>
+                <div class="result" id="undirected-dijkstra-result"></div>
+            </div>
+        </div>            
         <!--------------------------------------------------------- 
         ------------------ Орієнтований граф ----------------------
         ---------------------------------------------------------->
@@ -341,6 +356,17 @@
                 <div class="result" id="directed-cyclomatic-number-result"></div>
             </div>
         </div>
+        <!-- <div class="dropdown" id="directed-dropdown-dijkstra">
+            <button id="dropdown-btn" onclick="toggleDropdown(this)">
+                <i class="fas fa-chevron-down"></i> Алгоритм Дейкстри
+            </button>
+            <div class="dropdown-content">
+                <p>Обчислення найкоротших шляхів за алгоритмом Дейкстри.</p>
+                <input type="text" id="start-vertex-input" placeholder="Введіть початкову вершину">
+                <button class="execute-btn" onclick="executeFunction('directed-dijkstra')">Виконати</button>
+                <div class="result" id="directed-dijkstra-result"></div>
+            </div>
+        </div>      -->
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.1/canvg.min.js"></script>

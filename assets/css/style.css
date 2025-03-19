@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap");
+
 body {
     display: flex;
     height: 100vh;
@@ -26,17 +27,17 @@ body {
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    color: hsl(215, 83%, 53%); 
+    color: hsl(215, 83%, 53%);
     font-size: 1.5rem;
-    margin-right: 20px; 
+    margin-right: 20px;
     font-weight: 600;
 }
 
 .nav__logo i {
-    margin-right: 8px;  
+    margin-right: 8px;
     font-weight: initial;
     font-size: 1.7rem;
-    color: hsl(215, 83%, 53%); 
+    color: hsl(215, 83%, 53%);
 }
 
 .toolbar button {
@@ -138,7 +139,8 @@ body {
 
 @media (min-width: 768px) {
     .search-block {
-        flex-direction: row; /* Горизонтальний вигляд для більших екранів */
+        flex-direction: row;
+        /* Горизонтальний вигляд для більших екранів */
         gap: 15px;
     }
 
@@ -147,7 +149,8 @@ body {
     }
 
     .search-btn {
-        max-width: 30%; /* Обмеження ширини кнопки */
+        max-width: 30%;
+        /* Обмеження ширини кнопки */
     }
 }
 
@@ -233,7 +236,9 @@ body {
 }
 
 #undirected-vertex-degree-input,
-#directed-vertex-degree-input {
+#directed-vertex-degree-input,
+#undirected-start-node-input,
+#undirected-end-node-input {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -245,14 +250,18 @@ body {
 }
 
 #undirected-vertex-degree-input::placeholder,
-#directed-vertex-degree-input::placeholder {
+#directed-vertex-degree-input::placeholder,
+#undirected-start-node-input::placeholder,
+#undirected-end-node-input::placeholder {
     color: #aaa;
 }
 
 @media (max-width: 768px) {
 
     #undirected-vertex-degree-input,
-    #directed-vertex-degree-input {
+    #directed-vertex-degree-input,
+    #undirected-start-node-input,
+    #undirected-end-node-input {
         font-size: 14px;
         padding: 8px;
     }
@@ -325,6 +334,7 @@ td {
     padding: 5px;
     text-align: center;
 }
+
 /* Медіа-запити для мобільних пристроїв */
 @media (max-width: 768px) {
     body {
@@ -341,18 +351,23 @@ td {
     .toolbar {
         display: flex;
         flex-direction: row;
-        overflow-x: auto; /* Горизонтальна прокрутка */
-        white-space: nowrap; /* Запобігає переносу кнопок */
+        overflow-x: auto;
+        /* Горизонтальна прокрутка */
+        white-space: nowrap;
+        /* Запобігає переносу кнопок */
         gap: 8px;
         width: 100%;
-        height: 80px; /* Збільшена висота панелі */
+        height: 80px;
+        /* Збільшена висота панелі */
         padding: 10px;
         border-bottom: 2px solid #ccc;
-        align-items: center; /* Вирівнює кнопки по центру */
+        align-items: center;
+        /* Вирівнює кнопки по центру */
     }
 
     .toolbar button {
-        flex: 0 0 auto; /* Запобігає стисненню кнопок */
+        flex: 0 0 auto;
+        /* Запобігає стисненню кнопок */
         font-size: 16px;
         padding: 10px;
     }
@@ -400,8 +415,11 @@ td {
     }
 }
 
-button, input, select, textarea {
-    font-family: inherit; 
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
 }
 
 /* 

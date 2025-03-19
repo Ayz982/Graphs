@@ -21,6 +21,7 @@ const modes = {
     move: false,
     save: false,
     importFromXLSX: false,
+    weight: false,
 };
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -35,6 +36,7 @@ class Graph {
         this.vertices = new Set();
         this.edges = new Map();
         this.adjacencyList = new Map();
+        this.weights = new Map();
     }
 
     addVertex(vertex) {
@@ -57,7 +59,37 @@ class Graph {
             }
         }
     }
+    setEdgeWeight(v1, v2, weight) {
+        const key = this.type === "directed" ? `${v1}->${v2}` : `${Math.min(v1, v2)}-${Math.max(v1, v2)}`;
+        if (this.edges.has(key)) {
+            this.weights.set(key, weight);
+        }
+    }
 
+    getEdgeWeight(v1, v2) {
+        const key = this.type === "directed" ? `${v1}->${v2}` : `${Math.min(v1, v2)}-${Math.max(v1, v2)}`;
+        return this.weights.get(key) || null;
+    }
+
+}
+function setEdgeWeight(graph, v1, v2, weight) {
+    if (!graph || !(graph instanceof Graph)) {
+        console.error("Graph is undefined or not an instance of Graph.");
+        return;
+    }
+    graph.setEdgeWeight(v1, v2, weight);
+}
+
+function getEdgeWeight(graph, v1, v2) {
+    return graph.getEdgeWeight(v1, v2);
+}
+
+function displayEdgeWeight(v1, v2, x, y, weight) {
+    canvasGroup.append("text")
+        .attr("x", x).attr("y", y - 10)
+        .attr("text-anchor", "middle")
+        .text(weight)
+        .attr("class", "edge-weight");
 }
 
 const graph = new Graph();
@@ -144,9 +176,6 @@ function createLoop(vertexID) {
     graph.addEdge(vertexID, vertexID);
 }
 
-
-
-
 function createEdge(v1, v2) {
     if (!vertices.has(v1) || !vertices.has(v2)) return;
     const [x1, y1] = vertices.get(v1);
@@ -162,14 +191,14 @@ function createEdge(v1, v2) {
         .attr("x1", adjustedX1).attr("y1", adjustedY1)
         .attr("x2", adjustedX2).attr("y2", adjustedY2)
         .attr("stroke", "black").attr("stroke-width", 3).attr("class", "edge");
-
-    // canvasGroup.append("text")
-    //     .attr("x", (adjustedX1 + adjustedX2) / 2).attr("y", (adjustedY1 + adjustedY2) / 2 - 10)
-    //     .attr("text-anchor", "middle")
-    //     .attr("dominant-baseline", "middle")
-    //     .text(String.fromCharCode(96 + edgeCount++)).attr("class", "edge-label");
-
     graph.addEdge(v1, v2);
+    if (modes.weight) {
+        const weight = prompt("Введіть вагу ребра:", "1");
+        if (weight !== null && !isNaN(weight)) {
+            setEdgeWeight(graph, v1, v2, parseFloat(weight));
+            displayEdgeWeight(v1, v2, (x1 + x2) / 2, (y1 + y2) / 2, weight);
+        }
+    }
 }
 
 function createDirectedEdge(v1, v2) {
@@ -195,6 +224,13 @@ function createDirectedEdge(v1, v2) {
         .attr("marker-end", "url(#arrowhead)");
 
     graph.addEdge(v1, v2);
+    if (modes.weight) {
+        const weight = prompt("Введіть вагу ребра:", "1");
+        if (weight !== null && !isNaN(weight)) {
+            setEdgeWeight(graph, v1, v2, parseFloat(weight));
+            displayEdgeWeight(v1, v2, (x1 + x2) / 2, (y1 + y2) / 2, weight);
+        }
+    }
 }
 
 function editText(event) {
@@ -374,8 +410,123 @@ function executeFunction(functionName) {
     } else if (functionName === 'directed-cyclomatic-number') {
         result = getCyclomaticNumber(graph);
         displayCyclomaticNumber(result, graph.type);
+    } else if (functionName === 'undirected-dijkstra') {
+        executeDijkstra();
     }
 }
+
+function executeDijkstra() {
+    const startNode = parseInt(document.getElementById("undirected-start-node-input").value);
+    const endNode = parseInt(document.getElementById("undirected-end-node-input").value);
+
+    if (isNaN(startNode) || isNaN(endNode) || startNode === endNode) {
+        document.getElementById("undirected-dijkstra-result").innerHTML = "Будь ласка, введіть валідні вузли.";
+        return;
+    }
+
+    let distances = {};
+    let previousNodes = {};
+    let unvisitedNodes = new Set(graph.vertices);
+
+    for (let vertex of graph.vertices) {
+        distances[vertex] = Infinity;
+        previousNodes[vertex] = null;
+    }
+    distances[startNode] = 0;
+
+    updateDistanceTable(distances); // Перше оновлення таблиці
+
+    while (unvisitedNodes.size > 0) {
+        let currentNode = getClosestNode(unvisitedNodes, distances);
+        unvisitedNodes.delete(currentNode);
+
+        for (let neighbor of graph.adjacencyList.get(currentNode)) {
+            const edgeWeight = graph.getEdgeWeight(currentNode, neighbor);
+            const alternativeDistance = distances[currentNode] + edgeWeight;
+
+            if (alternativeDistance < distances[neighbor]) {
+                distances[neighbor] = alternativeDistance;
+                previousNodes[neighbor] = currentNode;
+            }
+        }
+
+        updateDistanceTable(distances);
+    }
+
+    let path = [];
+    let currentNode = endNode;
+    while (previousNodes[currentNode] !== null) {
+        path.unshift(currentNode);
+        currentNode = previousNodes[currentNode];
+    }
+
+    let resultText = "";
+    if (distances[endNode] === Infinity) {
+        resultText = "Неможливо дістатися до кінцевого вузла.";
+    } else {
+        path.unshift(startNode);
+        resultText = `Найкоротший шлях: ${path.join(" -> ")}<br>Відстань: ${distances[endNode]}`;
+    }
+
+    document.getElementById("undirected-dijkstra-result").innerHTML = resultText + "<br><br>Таблиця відстаней:<br>";
+    updateDistanceTable(distances);
+    updateGraphMatrixTable(); // Додаємо матрицю ваг
+}
+
+// Функція оновлення таблиці відстаней
+function updateDistanceTable(distances) {
+    let tableHTML = "<table border='1'><tr><th>Вузол</th><th>Відстань</th></tr>";
+    for (let vertex of graph.vertices) {
+        tableHTML += `<tr><td>${vertex}</td><td>${distances[vertex] === Infinity ? '∞' : distances[vertex]}</td></tr>`;
+    }
+    tableHTML += "</table>";
+    document.getElementById("undirected-dijkstra-result").innerHTML += tableHTML;
+}
+
+// Функція побудови квадратної матриці ваг графа
+function updateGraphMatrixTable() {
+    let vertices = Array.from(graph.vertices);
+    let tableHTML = "<br><br>Матриця ваг графа:<br><table border='1'><tr><th></th>";
+
+    // Заголовок стовпців
+    for (let v of vertices) {
+        tableHTML += `<th>${v}</th>`;
+    }
+    tableHTML += "</tr>";
+
+    // Заповнення матриці
+    for (let v1 of vertices) {
+        tableHTML += `<tr><th>${v1}</th>`; // Заголовок рядка
+        for (let v2 of vertices) {
+            if (v1 === v2) {
+                tableHTML += `<td>0</td>`; // Головна діагональ
+            } else {
+                let weight = graph.getEdgeWeight(v1, v2);
+                tableHTML += `<td>${weight !== undefined ? weight : '∞'}</td>`;
+            }
+        }
+        tableHTML += "</tr>";
+    }
+
+    tableHTML += "</table>";
+    document.getElementById("undirected-dijkstra-result").innerHTML += tableHTML;
+}
+
+// Функція знаходження найближчого вузла
+function getClosestNode(unvisitedNodes, distances) {
+    let closestNode = null;
+    let smallestDistance = Infinity;
+    for (let node of unvisitedNodes) {
+        if (distances[node] < smallestDistance) {
+            smallestDistance = distances[node];
+            closestNode = node;
+        }
+    }
+    return closestNode;
+}
+
+
+
 // Алгоритм DFS для пошуку компонент зв'язності
 function getConnectedComponents(graph) {
     let visited = new Set();
@@ -1102,6 +1253,7 @@ function updateToolbar() {
         document.getElementById('undirected-dropdown-diameter-graph'),
         document.getElementById('undirected-dropdown-center-graph'),
         document.getElementById('undirected-dropdown-cyclomatic-number'),
+        document.getElementById('undirected-dropdown-dijkstra'),
     ];
     const directedDropdowns = [
         document.getElementById('directed-dropdown-size'),
@@ -1117,6 +1269,7 @@ function updateToolbar() {
         document.getElementById('directed-dropdown-diameter-graph'),
         document.getElementById('directed-dropdown-center-graph'),
         document.getElementById('directed-dropdown-cyclomatic-number'),
+        // document.getElementById('directed-dropdown-dijkstra'),
     ];
     if (graphType === "directed") {
         graph.type = "directed";
@@ -1298,19 +1451,31 @@ function toggleDirectedEdgeMode(button) {
         resetModes();
     } else {
         modes.directedEdge = true;
-        resetOtherModes(["directedEdge"]);
+        resetOtherModes(["directedEdge", "weight"]); // Додаємо "weight", щоб не вимикати режим ваги
         setActiveButton(button);
     }
 }
+
 function toggleEdgeMode(button) {
     if (modes.edge) {
         resetModes();
     } else {
         modes.edge = true;
-        resetOtherModes(["edge"]);
+        resetOtherModes(["edge", "weight"]); // Додаємо "weight", щоб не вимикати режим ваги
         setActiveButton(button);
     }
 }
+
+function toggleWeightedGraphMode(button) {
+    if (modes.weight) {
+        modes.weight = false;
+        button.classList.remove("active");
+    } else {
+        modes.weight = true;
+        button.classList.add("active");
+    }
+}
+
 function toggleVertexMode(button) {
     if (modes.vertex) {
         resetModes();
@@ -1373,7 +1538,7 @@ d3.select("head").append("style").attr("type", "text/css").text(`
 `);
 
 function deleteSelected() {
-    canvasGroup.selectAll(".vertex, .edge, .edge-label, .vertex-label, .edge-loop, .text-element").remove();
+    canvasGroup.selectAll(".vertex, .edge, .edge-label, .vertex-label, .edge-loop, .text-element, .edge-weight").remove();
     vertices.clear();
     vertexCount = 1;
     edgeCount = 1;
